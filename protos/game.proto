@@ -49,5 +49,5 @@ service Game{
     rpc GetEvents (Nothing) returns (stream Event);
     rpc Move (Movement) returns (Nothing);
     rpc Turn (Direction) returns (Nothing);
-    rpc Fire (Nothing) return (Nothing);
+    rpc Fire (Nothing) returns (Nothing);
 }
