@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package grpc;
+
+message Nothing {}
+
+message Map{
+    string map = 1;
+}
+
+message PlayerInformation{
+    string id = 1;
+    int32 szx = 2;
+    int32 szy = 3;
+}
+
+message GameInformation{
+    int32 x = 1;
+    int32 y = 2;
+    string field = 3;
+}
+
+message Move{
+    string id = 1;
+    int32 move_x = 2;
+    int32 move_y = 3;
+}
+
+message Id{
+    string s = 1;
+}
+
+message Event{
+    string id = 1;
+    string action = 2;
+}
+
+message Movement{
+    int32 move_x = 1;
+    int32 move_y = 2;
+}
+
+message Direction{
+    string s = 1;
+}
+
+service Game{
+    rpc GetMap (Nothing) returns (Map);
+    rpc GetEvents (Nothing) returns (stream Event);
+    rpc Move (Movement) returns (Nothing);
+    rpc Turn (Direction) returns (Nothing);
+    rpc Fire (Nothing) return (Nothing);
+}
