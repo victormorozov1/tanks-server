@@ -30,11 +30,6 @@ message Id{
     string s = 1;
 }
 
-message Event{
-    string id = 1;
-    string action = 2;
-}
-
 message Movement{
     int32 move_x = 1;
     int32 move_y = 2;
@@ -44,9 +39,24 @@ message Direction{
     string s = 1;
 }
 
+message PlayerMovement{
+    string id = 1;
+    int32 move_x = 2;
+    int32 move_y = 3;
+}
+
+message PlayerTurn{
+    string id = 1;
+    string direction = 2;
+}
+
 service Game{
     rpc GetMap (Nothing) returns (Map);
-    rpc GetEvents (Nothing) returns (stream Event);
+
+    rpc GetPlayersMovements (Nothing) returns (stream PlayerMovement);
+    rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn);
+    rpc GetPlayersShots (Nothing) returns (stream Id);
+
     rpc Move (Movement) returns (Nothing);
     rpc Turn (Direction) returns (Nothing);
     rpc Fire (Nothing) returns (Nothing);
