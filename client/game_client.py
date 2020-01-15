@@ -14,7 +14,7 @@ class GameClient:
         self._game_service = game_grpc.GameStub(self._channel)
         self.move_x = 0
         self.move_y = 0
-        self.connected = False
+        self.connected = False  # Не забыть проверить на подключение если будет ошибка
 
     def connect(self):
         self.id = random_string(4)
@@ -32,5 +32,6 @@ class GameClient:
                 print(j, end=' ')
             print()
 
-
-
+    def start_listening_for_messages(self, on_message_received, iter):
+        for message in iter:
+            on_message_received(message)
