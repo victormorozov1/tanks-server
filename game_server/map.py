@@ -8,12 +8,12 @@ class Map:
         self.get_map()
         self.convert_map()
 
-    def get_map(self, n, m):  # Генерация карту в понятном для пользователя формате
+    def get_map(self):  # Генерация карту в понятном для пользователя формате
         self.map = []
-        for i in range(n):
+        for i in range(self.n):
             self.map.append([])
-            for j in range(m):
-                if j in [0, m - 1] or i in [0, n - 1]:
+            for j in range(self.m):
+                if j in [0, self.m - 1] or i in [0, self.n - 1]:
                     self.map[-1].append('#')
                 elif i % 2 == 0:
                     self.map[-1].append(['#', '.'][rd(9) // 6])
@@ -34,3 +34,11 @@ class Map:
         x1, y1 = start_pos
         x2, y2 = x1 + szx - 1, y1 + szy - 1
         return self.is_free(x1, y1), self.is_free(x2, y1), self.is_free(x1, y2), self.is_free(x2, y2)
+
+    def __str__(self):
+        return SEPARATORS[0].join([SEPARATORS[1].join([str(i) for i in j]) for j in self.converted_map])
+
+
+if __name__ == '__main__':
+    map = Map(10, 10)
+    print(map)

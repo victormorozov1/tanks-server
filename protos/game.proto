@@ -5,7 +5,7 @@ package grpc;
 message Nothing {}
 
 message Map{
-    string map = 1;
+    string s = 1;
 }
 
 message PlayerInformation{
@@ -50,7 +50,13 @@ message PlayerTurn{
     string direction = 2;
 }
 
+message PlayersPositions{
+    string s = 1;
+}
+
 service Game{
+    rpc Connect(PlayerInformation) returns (Nothing);
+
     rpc GetMap (Nothing) returns (Map);
 
     rpc GetPlayersMovements (Nothing) returns (stream PlayerMovement);

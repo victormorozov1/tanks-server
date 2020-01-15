@@ -1,17 +1,18 @@
 from game_server.grpc_out import game_pb2 as game_proto, game_pb2_grpc as game_grpc
 from time import sleep
 from random import choice, randrange
-from game_server.object import Object
 from game_server.constants import *
 from game_server.functions import *
 from math import sqrt, floor, sin, pi
 from game_server.map_generating import *
 from game_server.map import *
+from game_server.player import *
+from game_server.classes.tanks import *
 
 
 class GameService(game_grpc.GameServicer):
     def __init__(self):
-        self.map = get_converted_map()
+        self.map = Map(10, 10)
         self.n = N
         self.m = N
         self.session = dict()
@@ -35,42 +36,37 @@ class GameService(game_grpc.GameServicer):
             x, y = randrange(FIELD_SZ_X), randrange(FIELD_SZ_Y)
         return x, y
 
-    def field_str(self, client_win_size, player_id):
-        player_pos = self.session[player_id].x, self.session[player_id].y
-        lx, rx = player_pos[0] - client_win_size[0] // 2, player_pos[0] + client_win_size[0] // 2
-        ly, ry = player_pos[1] - client_win_size[1] // 2, player_pos[1] + client_win_size[1] // 2
+    def field_str(self):
         ret = ''
+        for i in self.session.values():
+            ret += SEPARATORS[0] + str(i)
+        return ret
 
-        for i in self.field:
-            if i.x in range(lx - CELL_SZ, rx + CELL_SZ) and i.y in range(ly - CELL_SZ, ry + CELL_SZ):
-                if i.id == player_id:
-                    i.name = 'Y'
-                    ret += FIELD_SEPARATOR + str(i)
-                    i.name = 'P'
-                else:
-                    ret += FIELD_SEPARATOR + str(i)
-
-        return ret.strip(FIELD_SEPARATOR)
-
-    def GetField(self, request, context):
-        print('New player connected')
+    def Connect(self, request, context):
+        print('New player connected!')
 
         x, y = self.free_cell()
-        player_id = request.s
         print('coords of new player', x, y)
+
+        player_id = request.id
+        print('new player id =', player_id)
+
         client_win_size = request.szx, request.szy
         print('client win size', client_win_size)
-        self.session[request.s] = Object(x, y, 'P', id=player_id)
-        player = self.session[player_id]
-        self.moving[player_id] = [0, 0]
 
-        self.field.append(player)
+        self.session[player_id] = Player(Tank(x, y, [], 100, 9), client_win_size, None)
 
+        print('returning nothing')
+        return game_proto.Nothing()
+
+    def GetPlayersPositions(self, request, context):
         while context.is_active():
-            yield game_proto.GameInformation(x=player.x, y=player.y, field=self.field_str(client_win_size, player_id))
+            yield game_proto.GameInformation(s=self.field_str())
             sleep(self.sleep)
 
-        self.field.remove(player)
+    def GetMap(self, request, context):
+        print('in get map')
+        return game_proto.Map(s=str(self.map))
 
     def make_step_by_pixel(self, obj, move_x, move_y):  # Делает шаг по 1 пикселю
         obj.x += move_x
