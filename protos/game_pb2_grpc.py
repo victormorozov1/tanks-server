@@ -41,7 +41,7 @@ class GameStub(object):
         )
     self.Move = channel.unary_unary(
         '/grpc.Game/Move',
-        request_serializer=game__pb2.Movement.SerializeToString,
+        request_serializer=game__pb2.Nothing.SerializeToString,
         response_deserializer=game__pb2.Nothing.FromString,
         )
     self.Turn = channel.unary_unary(
@@ -146,7 +146,7 @@ def add_GameServicer_to_server(servicer, server):
       ),
       'Move': grpc.unary_unary_rpc_method_handler(
           servicer.Move,
-          request_deserializer=game__pb2.Movement.FromString,
+          request_deserializer=game__pb2.Nothing.FromString,
           response_serializer=game__pb2.Nothing.SerializeToString,
       ),
       'Turn': grpc.unary_unary_rpc_method_handler(

@@ -31,6 +31,7 @@ class GameClient:
                 ret[-1].append(int(j))
                 print(j, end=' ')
             print()
+        return ret
 
     def start_listening_for_messages(self, on_message_received, iter):
         for message in iter:

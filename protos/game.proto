@@ -31,8 +31,7 @@ message Id{
 }
 
 message Movement{
-    int32 move_x = 1;
-    int32 move_y = 2;
+    bool moving = 1;
 }
 
 message Direction{
@@ -63,7 +62,7 @@ service Game{
     rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn);
     rpc GetPlayersShots (Nothing) returns (stream Id);
 
-    rpc Move (Movement) returns (Nothing);
+    rpc Move (Id) returns (Nothing);
     rpc Turn (Direction) returns (Nothing);
-    rpc Fire (Nothing) returns (Nothing);
+    rpc Fire (Id) returns (Nothing);
 }
