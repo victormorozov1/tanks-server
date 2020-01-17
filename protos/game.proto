@@ -2,67 +2,69 @@ syntax = "proto3";
 
 package grpc;
 
-message Nothing {}
+message Nothing {
+}
 
-message Map{
+message Map {
     string s = 1;
 }
 
-message PlayerInformation{
+message PlayerInformation {
     string id = 1;
     int32 szx = 2;
     int32 szy = 3;
 }
 
-message GameInformation{
+message GameInformation {
     int32 x = 1;
     int32 y = 2;
     string field = 3;
 }
 
-message Move{
+message Move {
     string id = 1;
     int32 move_x = 2;
     int32 move_y = 3;
 }
 
-message Id{
+message Id {
     string s = 1;
 }
 
-message Movement{
+message Movement {
     bool moving = 1;
 }
 
-message Direction{
-    string s = 1;
-}
-
-message PlayerMovement{
-    string id = 1;
-    int32 move_x = 2;
-    int32 move_y = 3;
-}
-
-message PlayerTurn{
+message TurnMessage {
     string id = 1;
     string direction = 2;
 }
 
-message PlayersPositions{
+message PlayerMovement {
+    string id = 1;
+    int32 move_x = 2;
+    int32 move_y = 3;
+}
+
+message PlayerTurn {
+    string id = 1;
+    string direction = 2;
+}
+
+message PlayersPositions {
     string s = 1;
 }
 
-service Game{
-    rpc Connect(PlayerInformation) returns (Nothing);
+service Game {
+    rpc Connect (PlayerInformation) returns (Nothing);
 
     rpc GetMap (Nothing) returns (Map);
 
     rpc GetPlayersMovements (Id) returns (stream PlayerMovement);
-    rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn);
+    rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn); // Не обязательныя для подключения функция, её можно использовать чтобы видеть в какую сторону направлен танк противника
     rpc GetPlayersShots (Nothing) returns (stream Id);
 
     rpc Move (Id) returns (Nothing);
-    rpc Turn (Direction) returns (Nothing);
+    rpc Turn (TurnMessage) returns (Nothing);
     rpc Fire (Id) returns (Nothing);
 }

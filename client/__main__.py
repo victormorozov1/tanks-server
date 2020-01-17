@@ -20,7 +20,23 @@ for i in map:
 
 gk.start_listening_for_players_movements(print_movement)
 sleep(1)
+gk.turn('up')
+sleep(1)
 gk.move()
+
+sleep(1)
+gk.turn('down')
+sleep(1)
+gk.move()
+
+sleep(1)
+gk.turn('left')
+sleep(1)
+gk.move()
+
+sleep(1)
+gk.turn('right')
+sleep(1)
+gk.move()
+
 sleep(10)
-
-

@@ -46,7 +46,7 @@ class GameStub(object):
         )
     self.Turn = channel.unary_unary(
         '/grpc.Game/Turn',
-        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Direction.SerializeToString,
+        request_serializer=game__server_dot_grpc__out_dot_game__pb2.TurnMessage.SerializeToString,
         response_deserializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.FromString,
         )
     self.Fire = channel.unary_unary(
@@ -82,8 +82,8 @@ class GameServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def GetPlayersTurns(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """Не обязательныя для подключения функция, её можно использовать чтобы видеть в какую сторону направлен танк противника
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -151,7 +151,7 @@ def add_GameServicer_to_server(servicer, server):
       ),
       'Turn': grpc.unary_unary_rpc_method_handler(
           servicer.Turn,
-          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Direction.FromString,
+          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.TurnMessage.FromString,
           response_serializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.SerializeToString,
       ),
       'Fire': grpc.unary_unary_rpc_method_handler(

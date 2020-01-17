@@ -46,12 +46,9 @@ class GameService(game_grpc.GameServicer):
         self.field.player_movements_information[player_id] = []
         while context.is_active():
             arr = self.field.player_movements_information[player_id]
-            print('in GetPlayersMovements    arr =', arr)
             self.field.player_movements_information[player_id] = []
             for i in arr:
-                print('returning id =', i.id, 'mave_x =', i.move_x, 'move_y =', i.move_y)
                 yield i
-                print('okkk')
             sleep(self.sleep)
 
     def GetMap(self, request, context):
@@ -64,4 +61,9 @@ class GameService(game_grpc.GameServicer):
         player = self.field.objects[request.s]
         player.is_moving = True
         print('Move end')
+        return game_proto.Nothing()
+
+    def Turn(self, request, context):
+        print('turning id=', request.id, 'direction =', request.direction)
+        self.field.objects[request.id].tank.moving_direction = request.direction
         return game_proto.Nothing()

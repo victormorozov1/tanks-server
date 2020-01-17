@@ -43,3 +43,6 @@ class GameClient:
 
     def move(self):
         self._game_service.Move(game_proto.Id(s=self.id))
+
+    def turn(self, direction):
+        self._game_service.Turn(game_proto.TurnMessage(id=self.id, direction=direction))

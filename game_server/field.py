@@ -39,7 +39,7 @@ class Field:
             return 0, 0
 
         if player.tank.moving_direction == 'up':
-            return 0, MAX_SPEED
+            return 0, -MAX_SPEED
         elif player.tank.moving_direction == 'left':
             return -MAX_SPEED, 0
         elif player.tank.moving_direction == 'down':
@@ -70,7 +70,7 @@ class Field:
         for i in self.player_movements_information.keys():
             if i in self.player_movements_information:
                 self.player_movements_information[i].append(
-                    game_proto.PlayerMovement(id=player_id, move_x=end_moving_x, move_y=end_moving_y))
+                    game_proto.PlayerMovement(id=player_id[:2:], move_x=end_moving_x, move_y=end_moving_y))
 
         self.objects[player_id].is_moving = False
 
