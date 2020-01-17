@@ -33,6 +33,13 @@ class GameClient:
             print()
         return ret
 
-    def start_listening_for_messages(self, on_message_received, iter):
-        for message in iter:
-            on_message_received(message)
+    def _listen_for_players_movements(self):
+        for message in self._game_service.GetPlayersMovements(game_proto.Id(s=self.id)):
+            self._on_player_movement_received(message)
+
+    def start_listening_for_players_movements(self, on_message_received):
+        self._on_player_movement_received = on_message_received
+        threading.Thread(target=self._listen_for_players_movements, daemon=True).start()
+
+    def move(self):
+        self._game_service.Move(game_proto.Id(s=self.id))

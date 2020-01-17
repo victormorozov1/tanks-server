@@ -58,7 +58,7 @@ service Game{
 
     rpc GetMap (Nothing) returns (Map);
 
-    rpc GetPlayersMovements (Nothing) returns (stream PlayerMovement);
+    rpc GetPlayersMovements (Id) returns (stream PlayerMovement);
     rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn);
     rpc GetPlayersShots (Nothing) returns (stream Id);
 

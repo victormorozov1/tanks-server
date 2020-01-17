@@ -21,7 +21,7 @@ class Server:
         print('Press CTRL+C to stop...')
         try:
             while True:
-                # self.service.game_iteration()
+                self.service.game_iteration()
                 sleep(self.sleep)
         except KeyboardInterrupt:
             self._server.stop(None)

@@ -1,4 +1,9 @@
 from client.game_client import *
+from time import sleep
+
+
+def print_movement(message):
+    print('new movement: id=' + message.id, 'move_x=' + str(message.move_x), 'move_y=' + str(message.move_y))
 
 
 gk = GameClient()
@@ -12,5 +17,10 @@ for i in map:
         else:
             print('#', end='')
     print()
+
+gk.start_listening_for_players_movements(print_movement)
+sleep(1)
+gk.move()
+sleep(10)
 
 

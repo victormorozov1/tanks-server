@@ -16,13 +16,11 @@ class GameService(game_grpc.GameServicer):
         self.map = Map(10, 10)
         self.n = N
         self.m = N
-        self.session = dict()
         self.sleep = 0.01
         self.field = Field()
-        self.players_movements = dict()
 
     def game_iteration(self):
-        for id in self.session.keys():
+        for id in self.field.objects.keys():
             self.field.make_step(id)
 
     def Connect(self, request, context):
@@ -43,9 +41,17 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
 
     def GetPlayersMovements(self, request, context):
+        player_id = request.s
+        print('player with id', player_id, 'want to get players movements')
+        self.field.player_movements_information[player_id] = []
         while context.is_active():
-            for id, i in self.players_movements.items():
-                yield game_proto.PlayerMovement(id=id, move_x=i[0], move_y=i[1])
+            arr = self.field.player_movements_information[player_id]
+            print('in GetPlayersMovements    arr =', arr)
+            self.field.player_movements_information[player_id] = []
+            for i in arr:
+                print('returning id =', i.id, 'mave_x =', i.move_x, 'move_y =', i.move_y)
+                yield i
+                print('okkk')
             sleep(self.sleep)
 
     def GetMap(self, request, context):
@@ -53,5 +59,9 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Map(s=str(self.map))
 
     def Move(self, request, context):
-        player = self.field.objects[request.id]
+        print('Move id=', end='')
+        print(request.s)
+        player = self.field.objects[request.s]
         player.is_moving = True
+        print('Move end')
+        return game_proto.Nothing()
