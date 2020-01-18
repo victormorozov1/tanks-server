@@ -7,11 +7,12 @@ from game_server.grpc_out import game_pb2 as game_proto, game_pb2_grpc as game_g
 class Field:
     def __init__(self):
         self.map = Map(N, N)
-        self.objects = dict()
+        self.players = dict()
+        self.bullets = dict()
         self.player_movements_information = dict()
 
     def free(self, x, y, sz, ignore=[]):
-        for id, i in self.objects.items():
+        for id, i in self.players.items():
             if i not in ignore and id not in ignore:
                 if abs(x - i.tank.x) < CELL_SZ and abs(y - i.tank.y) < sz:
                     return False
@@ -26,14 +27,14 @@ class Field:
 
     def make_step_by_pixel(self, player_id, move_x, move_y):  # Делает шаг по 1 пикселю
         # print('player_id in makepix', player_id)
-        player = self.objects[player_id]
+        player = self.players[player_id]
         if self.free(player.tank.x + move_x, player.tank.y + move_y, TANK_SZ, ignore=[player]):
             player.tank.move(move_x, move_y)
             return move_x, move_y
         return 0, 0
 
     def get_move(self, player_id):
-        player = self.objects[player_id]
+        player = self.players[player_id]
 
         if not player.is_moving:
             return 0, 0
@@ -50,7 +51,7 @@ class Field:
         # print('player with id =', player_id, 'is making step', end=' ')
         global move_x, move_y
 
-        player = self.objects[player_id]
+        player = self.players[player_id]
         move_x, move_y = self.get_move(player_id)
         # print('on', move_x, move_y)
         if move_x == 0 and move_y == 0:
@@ -58,24 +59,20 @@ class Field:
         end_moving_x, end_moving_y = 0, 0
 
         for i in range(abs(move_x)):
-            mx, my = self.make_step_by_pixel(player_id, abs(move_x) // move_x, 0)
-            end_moving_x += mx
-            end_moving_y += my
+            self.make_step_by_pixel(player_id, abs(move_x) // move_x, 0)
 
         for i in range(abs(move_y)):
-            mx, my = self.make_step_by_pixel(player_id, 0, abs(move_y) // move_y)
-            end_moving_x += mx
-            end_moving_y += my
+            self.make_step_by_pixel(player_id, 0, abs(move_y) // move_y)
 
         for i in self.player_movements_information.keys():
             if i in self.player_movements_information:
                 self.player_movements_information[i].append(
-                    game_proto.PlayerMovement(id=player_id[:2:], move_x=end_moving_x, move_y=end_moving_y))
+                    game_proto.PlayerMovement(id=player_id[:2:], new_x=player.tank.x, new_y=player.tank.y))
 
-        self.objects[player_id].is_moving = False
+        self.players[player_id].is_moving = False
 
     def __str__(self):
         ret = ''
-        for i in self.objects.values():
+        for i in self.players.values():
             ret += SEPARATORS[0] + str(i)
         return ret

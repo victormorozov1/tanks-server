@@ -1,6 +1,19 @@
 from math import sqrt
 
 
+def diff_to_min(a, b, c):
+    if c in range(a, b):
+        return 0
+    return min(abs(c - a), abs(c - b))
+
+
+def object_to_point_diff(obj, point_pos):
+    dx = diff_to_min(obj.x, obj.x + obj.szx, point_pos[0])
+    dy = diff_to_min(obj.y, obj.x + obj.szy, point_pos[1])
+    return sqrt(dx ** 2 + dy ** 2)
+
+
+# Функция расстояния между двумя точками
 def diff(*args):
     if len(args) == 2:
         return diff(*args[0], *args[1])

@@ -7,7 +7,7 @@ from math import sqrt, floor, sin, pi
 from game_server.map_generating import *
 from game_server.map import *
 from game_server.player import *
-from game_server.classes.tanks import *
+from game_server.tanks import *
 from game_server.field import *
 
 
@@ -20,8 +20,12 @@ class GameService(game_grpc.GameServicer):
         self.field = Field()
 
     def game_iteration(self):
-        for id in self.field.objects.keys():
+        for id in self.field.players.keys():
             self.field.make_step(id)
+        for id, bullet in self.field.bullets.items():
+            if bullet.deleted:
+                del self.field.bullets[id]
+            bullet.move()
 
     def Connect(self, request, context):
         print('New player connected!')
@@ -35,7 +39,7 @@ class GameService(game_grpc.GameServicer):
         client_win_size = request.szx, request.szy
         print('client win size', client_win_size)
 
-        self.field.objects[player_id] = Player(Tank(x, y, [], 100, 9), client_win_size)
+        self.field.players[player_id] = Player(Tank(x, y, [], 100, 9), client_win_size)
 
         print('returning nothing')
         return game_proto.Nothing()
@@ -58,12 +62,21 @@ class GameService(game_grpc.GameServicer):
     def Move(self, request, context):
         print('Move id=', end='')
         print(request.s)
-        player = self.field.objects[request.s]
+        player = self.field.players[request.s]
         player.is_moving = True
         print('Move end')
         return game_proto.Nothing()
 
     def Turn(self, request, context):
         print('turning id=', request.id, 'direction =', request.direction)
-        self.field.objects[request.id].tank.moving_direction = request.direction
+        self.field.players[request.id].tank.moving_direction = request.direction
         return game_proto.Nothing()
+    
+    def Fire(self, request, context):
+        player_id = request.s
+        self.field.players[player_id].tank.fire()
+
+    def GetAllBullets(self, request, context):
+        while context.is_active():
+            yield SEPARATORS[0].join([str(i) for i in self.field.bullets])
+            sleep(self.sleep)
