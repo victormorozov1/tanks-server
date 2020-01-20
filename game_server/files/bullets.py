@@ -1,4 +1,4 @@
-from game_server.functions import *
+from game_server.files.functions import *
 
 
 class Bullet:  # В классе храняться координаты ЦЕНТРА снаряда
@@ -16,7 +16,6 @@ class Bullet:  # В классе храняться координаты ЦЕН�
 
     def check_for_hit_on_target(self):
         for player in self.field.players.values():
-            print('player =', player)
             tank = player.tank
             if object_to_point_diff(tank, (self.x, self.y)) < self.radius:
                 tank.healths -= self.damage

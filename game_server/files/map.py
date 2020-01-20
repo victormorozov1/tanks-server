@@ -1,5 +1,5 @@
 from random import randrange as rd
-from game_server.constants import *
+from game_server.files.constants import *
 
 
 class Map:

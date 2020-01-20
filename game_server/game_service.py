@@ -1,14 +1,13 @@
 from game_server.grpc_out import game_pb2 as game_proto, game_pb2_grpc as game_grpc
 from time import sleep
 from random import choice, randrange
-from game_server.constants import *
-from game_server.functions import *
+from game_server.files.constants import *
+from game_server.files.functions import *
 from math import sqrt, floor, sin, pi
-from game_server.map_generating import *
-from game_server.map import *
-from game_server.player import *
-from game_server.tanks import *
-from game_server.field import *
+from game_server.files.map import *
+from game_server.files.player import *
+from game_server.files.tanks import *
+from game_server.files.field import *
 
 
 class GameService(game_grpc.GameServicer):

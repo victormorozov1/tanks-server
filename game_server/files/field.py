@@ -1,5 +1,5 @@
-from game_server.map import *
-from game_server.constants import *
+from game_server.files.map import *
+from game_server.files.constants import *
 from random import randrange as rd
 from game_server.grpc_out import game_pb2 as game_proto, game_pb2_grpc as game_grpc
 

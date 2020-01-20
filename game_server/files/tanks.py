@@ -1,5 +1,5 @@
-from game_server.constants import *
-from game_server.bullets import *
+from game_server.files.constants import *
+from game_server.files.bullets import *
 
 
 class Tank:
