@@ -16,9 +16,9 @@ class Map:
                 if j in [0, self.m - 1] or i in [0, self.n - 1]:
                     self.map[-1].append('#')
                 elif i % 2 == 0:
-                    self.map[-1].append(['#', '.'][rd(9) // 6])
+                    self.map[-1].append(['.', '.'][rd(9) // 6])
                 else:
-                    self.map[-1].append(['.', '#'][rd(7) // 6])
+                    self.map[-1].append(['.', '.'][rd(7) // 6])
 
     def convert_map(self):
         self.converted_map = []

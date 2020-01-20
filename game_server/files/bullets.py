@@ -1,4 +1,5 @@
 from game_server.files.functions import *
+from game_server.files.constants import *
 
 
 class Bullet:  # В классе храняться координаты ЦЕНТРА снаряда
@@ -36,3 +37,6 @@ class Bullet:  # В классе храняться координаты ЦЕН�
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
+
+    def __str__(self):
+        return SEPARATORS[0].join([str(self.x), str(self.y)])  # Если улучшать игру то нажно будет добавить другую информацию

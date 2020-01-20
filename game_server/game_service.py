@@ -87,6 +87,7 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
+        print('player want\'s to get all bullets')
         while context.is_active():
-            yield SEPARATORS[0].join([str(i) for i in self.field.bullets])
+            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in self.field.bullets.values()]))
             sleep(self.sleep)

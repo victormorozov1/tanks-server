@@ -33,14 +33,6 @@ class GameClient:
             print()
         return ret
 
-    def _listen_for_players_movements(self):
-        for message in self._game_service.GetPlayersMovements(game_proto.Id(s=self.id)):
-            self._on_player_movement_received(message)
-
-    def start_listening_for_players_movements(self, on_message_received):
-        self._on_player_movement_received = on_message_received
-        threading.Thread(target=self._listen_for_players_movements, daemon=True).start()
-
     def move(self):
         self._game_service.Move(game_proto.Id(s=self.id))
 
@@ -49,3 +41,18 @@ class GameClient:
 
     def fire(self):
         self._game_service.Fire(game_proto.Id(s=self.id))
+
+    def start_listening_for_messages(self, on_message_received, it):
+        threading.Thread(target=self._listen_for_messages, daemon=True, args=(on_message_received, it)).start()
+
+    def _listen_for_messages(self, on_message_received, it):
+        for message in it:
+            on_message_received(message)
+
+    def start_listening_for_bullets_positions(self, on_message_received):
+        self.start_listening_for_messages(on_message_received,
+                                          self._game_service.GetAllBullets(game_proto.Nothing()))
+
+    def start_listening_for_players_movements(self, on_message_received):
+        self.start_listening_for_messages(on_message_received,
+                                          self._game_service.GetPlayersMovements(game_proto.Id(s=self.id)))
