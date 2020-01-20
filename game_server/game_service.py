@@ -22,10 +22,15 @@ class GameService(game_grpc.GameServicer):
     def game_iteration(self):
         for id in self.field.players.keys():
             self.field.make_step(id)
+
+        deleted_bullets_id = []
         for id, bullet in self.field.bullets.items():
             if bullet.deleted:
-                del self.field.bullets[id]
-            bullet.move()
+                deleted_bullets_id.append(id)
+            else:
+                bullet.move()
+        for i in deleted_bullets_id:
+            del self.field.bullets[i]
 
     def Connect(self, request, context):
         print('New player connected!')
@@ -39,7 +44,7 @@ class GameService(game_grpc.GameServicer):
         client_win_size = request.szx, request.szy
         print('client win size', client_win_size)
 
-        self.field.players[player_id] = Player(Tank(x, y, [], 100, 9), client_win_size)
+        self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size)
 
         print('returning nothing')
         return game_proto.Nothing()
@@ -73,8 +78,14 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
     
     def Fire(self, request, context):
+        print('Fire')
         player_id = request.s
-        self.field.players[player_id].tank.fire()
+        print('player_id =', player_id)
+        try:
+            self.field.players[player_id].tank.fire()
+        except BaseException as e:
+            print(e)
+        return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
         while context.is_active():

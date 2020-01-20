@@ -15,9 +15,11 @@ class Bullet:  # В классе храняться координаты ЦЕН�
         self.deleted = False
 
     def check_for_hit_on_target(self):
-        for tank in self.field.tanks:
+        for player in self.field.players.values():
+            print('player =', player)
+            tank = player.tank
             if object_to_point_diff(tank, (self.x, self.y)) < self.radius:
-                tank.health -= self.damage
+                tank.healths -= self.damage
                 self.deleted = True
 
         arr_x = [self.x - self.radius, self.x + self.radius]
@@ -25,7 +27,7 @@ class Bullet:  # В классе храняться координаты ЦЕН�
         for x in arr_x:
             for y in arr_y:
                 if not self.field.map.is_free(x, y):
-                    self.field.deleted_bullets.append(self)
+                    self.deleted = True
                     # Тут ещё нужно будет понижать здоровье стены
 
     def move(self):

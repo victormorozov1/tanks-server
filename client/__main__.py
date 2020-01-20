@@ -18,8 +18,8 @@ for i in map:
             print('#', end='')
     print()
 
-gk.start_listening_for_players_movements(print_movement)
-sleep(1)
-gk.fire('up')
+#gk.start_listening_for_players_movements(print_movement)
+
+gk.fire()
 
 sleep(10)

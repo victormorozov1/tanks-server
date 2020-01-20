@@ -46,3 +46,6 @@ class GameClient:
 
     def turn(self, direction):
         self._game_service.Turn(game_proto.TurnMessage(id=self.id, direction=direction))
+
+    def fire(self):
+        self._game_service.Fire(game_proto.Id(s=self.id))
