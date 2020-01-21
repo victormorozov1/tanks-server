@@ -1,5 +1,6 @@
 from random import randrange as rd
 from game_server.files.constants import *
+from random import choice
 
 
 class Map:
@@ -16,7 +17,7 @@ class Map:
                 if j in [0, self.m - 1] or i in [0, self.n - 1]:
                     self.map[-1].append('#')
                 elif i % 2 == 0:
-                    self.map[-1].append(['#', '.'][rd(9) // 6])
+                    self.map[-1].append(choice(['#'] + ['.'] * 5))
                 else:
                     self.map[-1].append(['.', '.'][rd(7) // 6])
 
