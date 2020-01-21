@@ -31,7 +31,7 @@ class GameStub(object):
         )
     self.GetPlayersTurns = channel.unary_stream(
         '/grpc.Game/GetPlayersTurns',
-        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.SerializeToString,
+        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
         response_deserializer=game__server_dot_grpc__out_dot_game__pb2.PlayerTurn.FromString,
         )
     self.GetAllBullets = channel.unary_stream(
@@ -148,7 +148,7 @@ def add_GameServicer_to_server(servicer, server):
       ),
       'GetPlayersTurns': grpc.unary_stream_rpc_method_handler(
           servicer.GetPlayersTurns,
-          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.FromString,
+          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Id.FromString,
           response_serializer=game__server_dot_grpc__out_dot_game__pb2.PlayerTurn.SerializeToString,
       ),
       'GetAllBullets': grpc.unary_stream_rpc_method_handler(

@@ -65,6 +65,10 @@ class GameService(game_grpc.GameServicer):
 
     def Turn(self, request, context):
         self.field.players[request.id].tank.moving_direction = request.direction
+
+        for i in self.field.player_turns_information.keys():
+            self.field.player_turns_information[i].append(game_proto.PlayerTurn(id=request.id[:2:], direction=request.direction))
+
         return game_proto.Nothing()
 
     def Fire(self, request, context):
@@ -88,3 +92,13 @@ class GameService(game_grpc.GameServicer):
             except BaseException as e:
                 print(e)
         print('end')
+
+    def GetPlayersTurns(self, request, context):
+        player_id = request.s
+        self.field.player_turns_information[player_id] = []
+        while context.is_active():
+            arr = self.field.player_turns_information[player_id]
+            self.field.player_turns_information[player_id] = []
+            for i in arr:
+                yield i
+            sleep(self.sleep)

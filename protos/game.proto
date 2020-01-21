@@ -77,7 +77,7 @@ service Game {
     rpc GetMap (Nothing) returns (Map);
 
     rpc GetPlayersMovements (Id) returns (stream PlayerMovement);
-    rpc GetPlayersTurns (Nothing) returns (stream PlayerTurn); // Не обязательныя для подключения функция, её можно использовать чтобы видеть в какую сторону направлен танк противника
+    rpc GetPlayersTurns (Id) returns (stream PlayerTurn); // Не обязательныя для подключения функция, её можно использовать чтобы видеть в какую сторону направлен танк противника
     rpc GetAllBullets (Nothing) returns (stream Bullets);
     rpc GetAllPlayers (Nothing) returns (stream OtherPlayerInformation);
 

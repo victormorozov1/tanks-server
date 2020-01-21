@@ -17,6 +17,14 @@ def player_movement_received(message):
         tanks[id] = Tank(id, field_object, x=new_x, y=new_y)
 
 
+def player_turn_received(message):
+    id, direction = message.id, message.direction
+    if id in tanks.keys():
+        tanks[id].turn(direction)
+    else:
+        print(f'ERROR: received new tank turn with id={id}')
+
+
 class Tank:
     def __init__(self, id, field_object, direction='up', x=-100, y=-100):
         self.field_object = field_object
@@ -33,16 +41,20 @@ class Tank:
         self.field_object.rect.x, self.field_object.rect.y = new_x, new_y
 
     def turn_up(self):
-        self.direction = 'up'
+        self.turn('up')
 
     def turn_down(self):
-        self.direction = 'down'
+        self.turn('down')
 
     def turn_left(self):
-        self.direction = 'left'
+        self.turn('left')
 
     def turn_right(self):
-        self.direction = 'right'
+        self.turn('right')
+
+    def turn(self, direction):
+        self.direction = direction
+        self.field_object.turn(direction)
     
 
 class MyGame(Game):
@@ -105,7 +117,7 @@ if __name__ == '__main__':
             tanks[i[0]] = Tank(i[0], my_game.field.add_object(i[0], tank_pict, i[1], i[2]), x=i[1], y=i[2])
 
     gk.start_listening_for_players_movements(player_movement_received)
-
+    gk.start_listening_for_players_turns(player_turn_received)
 
     tanks[tank.id] = tank
 
