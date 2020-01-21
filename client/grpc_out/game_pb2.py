@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='grpc',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1a\x63lient/grpc_out/game.proto\x12\x04grpc\"\t\n\x07Nothing\"\x10\n\x03Map\x12\t\n\x01s\x18\x01 \x01(\t\"9\n\x11PlayerInformation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0b\n\x03szx\x18\x02 \x01(\x05\x12\x0b\n\x03szy\x18\x03 \x01(\x05\"6\n\x0fGameInformation\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\r\n\x05\x66ield\x18\x03 \x01(\t\"2\n\x04Move\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06move_x\x18\x02 \x01(\x05\x12\x0e\n\x06move_y\x18\x03 \x01(\x05\"\x0f\n\x02Id\x12\t\n\x01s\x18\x01 \x01(\t\"\x1a\n\x08Movement\x12\x0e\n\x06moving\x18\x01 \x01(\x08\",\n\x0bTurnMessage\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tdirection\x18\x02 \x01(\t\":\n\x0ePlayerMovement\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05new_x\x18\x02 \x01(\x05\x12\r\n\x05new_y\x18\x03 \x01(\x05\"+\n\nPlayerTurn\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tdirection\x18\x02 \x01(\t\"\x1d\n\x10PlayersPositions\x12\t\n\x01s\x18\x01 \x01(\t\"\x14\n\x07\x42ullets\x12\t\n\x01s\x18\x01 \x01(\t\"3\n\x08Position\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\x11\n\tdirection\x18\x03 \x01(\t2\xea\x02\n\x04Game\x12\x32\n\x07\x43onnect\x12\x17.grpc.PlayerInformation\x1a\x0e.grpc.Position\x12\"\n\x06GetMap\x12\r.grpc.Nothing\x1a\t.grpc.Map\x12\x37\n\x13GetPlayersMovements\x12\x08.grpc.Id\x1a\x14.grpc.PlayerMovement0\x01\x12\x34\n\x0fGetPlayersTurns\x12\r.grpc.Nothing\x1a\x10.grpc.PlayerTurn0\x01\x12/\n\rGetAllBullets\x12\r.grpc.Nothing\x1a\r.grpc.Bullets0\x01\x12\x1f\n\x04Move\x12\x08.grpc.Id\x1a\r.grpc.Nothing\x12(\n\x04Turn\x12\x11.grpc.TurnMessage\x1a\r.grpc.Nothing\x12\x1f\n\x04\x46ire\x12\x08.grpc.Id\x1a\r.grpc.Nothingb\x06proto3')
+  serialized_pb=_b('\n\x1a\x63lient/grpc_out/game.proto\x12\x04grpc\"\t\n\x07Nothing\"\x10\n\x03Map\x12\t\n\x01s\x18\x01 \x01(\t\"9\n\x11PlayerInformation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0b\n\x03szx\x18\x02 \x01(\x05\x12\x0b\n\x03szy\x18\x03 \x01(\x05\"6\n\x0fGameInformation\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\r\n\x05\x66ield\x18\x03 \x01(\t\"2\n\x04Move\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06move_x\x18\x02 \x01(\x05\x12\x0e\n\x06move_y\x18\x03 \x01(\x05\"\x0f\n\x02Id\x12\t\n\x01s\x18\x01 \x01(\t\"\x1a\n\x08Movement\x12\x0e\n\x06moving\x18\x01 \x01(\x08\",\n\x0bTurnMessage\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tdirection\x18\x02 \x01(\t\":\n\x0ePlayerMovement\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05new_x\x18\x02 \x01(\x05\x12\r\n\x05new_y\x18\x03 \x01(\x05\"+\n\nPlayerTurn\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tdirection\x18\x02 \x01(\t\"\x1d\n\x10PlayersPositions\x12\t\n\x01s\x18\x01 \x01(\t\"\x14\n\x07\x42ullets\x12\t\n\x01s\x18\x01 \x01(\t\"3\n\x08Position\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\x11\n\tdirection\x18\x03 \x01(\t\":\n\x16OtherPlayerInformation\x12\n\n\x02id\x18\x01 \x01(\t\x12\t\n\x01x\x18\x02 \x01(\x05\x12\t\n\x01y\x18\x03 \x01(\x05\x32\xaa\x03\n\x04Game\x12\x32\n\x07\x43onnect\x12\x17.grpc.PlayerInformation\x1a\x0e.grpc.Position\x12\"\n\x06GetMap\x12\r.grpc.Nothing\x1a\t.grpc.Map\x12\x37\n\x13GetPlayersMovements\x12\x08.grpc.Id\x1a\x14.grpc.PlayerMovement0\x01\x12\x34\n\x0fGetPlayersTurns\x12\r.grpc.Nothing\x1a\x10.grpc.PlayerTurn0\x01\x12/\n\rGetAllBullets\x12\r.grpc.Nothing\x1a\r.grpc.Bullets0\x01\x12>\n\rGetAllPlayers\x12\r.grpc.Nothing\x1a\x1c.grpc.OtherPlayerInformation0\x01\x12\x1f\n\x04Move\x12\x08.grpc.Id\x1a\r.grpc.Nothing\x12(\n\x04Turn\x12\x11.grpc.TurnMessage\x1a\r.grpc.Nothing\x12\x1f\n\x04\x46ire\x12\x08.grpc.Id\x1a\r.grpc.Nothingb\x06proto3')
 )
 
 
@@ -505,6 +505,51 @@ _POSITION = _descriptor.Descriptor(
   serialized_end=532,
 )
 
+
+_OTHERPLAYERINFORMATION = _descriptor.Descriptor(
+  name='OtherPlayerInformation',
+  full_name='grpc.OtherPlayerInformation',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='grpc.OtherPlayerInformation.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='x', full_name='grpc.OtherPlayerInformation.x', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='grpc.OtherPlayerInformation.y', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=534,
+  serialized_end=592,
+)
+
 DESCRIPTOR.message_types_by_name['Nothing'] = _NOTHING
 DESCRIPTOR.message_types_by_name['Map'] = _MAP
 DESCRIPTOR.message_types_by_name['PlayerInformation'] = _PLAYERINFORMATION
@@ -518,6 +563,7 @@ DESCRIPTOR.message_types_by_name['PlayerTurn'] = _PLAYERTURN
 DESCRIPTOR.message_types_by_name['PlayersPositions'] = _PLAYERSPOSITIONS
 DESCRIPTOR.message_types_by_name['Bullets'] = _BULLETS
 DESCRIPTOR.message_types_by_name['Position'] = _POSITION
+DESCRIPTOR.message_types_by_name['OtherPlayerInformation'] = _OTHERPLAYERINFORMATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Nothing = _reflection.GeneratedProtocolMessageType('Nothing', (_message.Message,), {
@@ -611,6 +657,13 @@ Position = _reflection.GeneratedProtocolMessageType('Position', (_message.Messag
   })
 _sym_db.RegisterMessage(Position)
 
+OtherPlayerInformation = _reflection.GeneratedProtocolMessageType('OtherPlayerInformation', (_message.Message,), {
+  'DESCRIPTOR' : _OTHERPLAYERINFORMATION,
+  '__module__' : 'client.grpc_out.game_pb2'
+  # @@protoc_insertion_point(class_scope:grpc.OtherPlayerInformation)
+  })
+_sym_db.RegisterMessage(OtherPlayerInformation)
+
 
 
 _GAME = _descriptor.ServiceDescriptor(
@@ -619,8 +672,8 @@ _GAME = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=535,
-  serialized_end=897,
+  serialized_start=595,
+  serialized_end=1021,
   methods=[
   _descriptor.MethodDescriptor(
     name='Connect',
@@ -668,9 +721,18 @@ _GAME = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='GetAllPlayers',
+    full_name='grpc.Game.GetAllPlayers',
+    index=5,
+    containing_service=None,
+    input_type=_NOTHING,
+    output_type=_OTHERPLAYERINFORMATION,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='Move',
     full_name='grpc.Game.Move',
-    index=5,
+    index=6,
     containing_service=None,
     input_type=_ID,
     output_type=_NOTHING,
@@ -679,7 +741,7 @@ _GAME = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='Turn',
     full_name='grpc.Game.Turn',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=_TURNMESSAGE,
     output_type=_NOTHING,
@@ -688,7 +750,7 @@ _GAME = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='Fire',
     full_name='grpc.Game.Fire',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=_ID,
     output_type=_NOTHING,

@@ -15,7 +15,6 @@ class Field:
         for id, i in self.players.items():
             if i not in ignore and id not in ignore:
                 if abs(x - i.tank.x) < sz and abs(y - i.tank.y) < sz:
-                    print('No')
                     return False
 
         return self.map.area_is_free((x, y), sz, sz) and x in range(0, FIELD_SZ_X - sz) and y in range(0,

@@ -31,21 +31,18 @@ class GameService(game_grpc.GameServicer):
             del self.field.bullets[i]
 
     def Connect(self, request, context):
-        print('New player connected!')
 
         x, y = self.field.free_cell()
-        print('coords of new player', x, y)
 
         player_id = request.id
-        print('new player id =', player_id)
 
         client_win_size = request.szx, request.szy
-        print('client win size', client_win_size)
 
         self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size,
                                                player_id)
 
-        print('returning nothing')
+        self.field.players[player_id].is_moving = True  # Заставляем игрока двинуться 1 раз чтобы его увидели другие
+
         return game_proto.Position(x=x, y=y, direction='up')
 
     def GetPlayersMovements(self, request, context):
@@ -82,3 +79,12 @@ class GameService(game_grpc.GameServicer):
         while context.is_active():
             yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in self.field.bullets.values()]))
             sleep(self.sleep)
+
+    def GetAllPlayers(self, request, context):
+        print('in get all players')
+        for i in self.field.players.values():
+            try:
+                yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y)
+            except BaseException as e:
+                print(e)
+        print('end')

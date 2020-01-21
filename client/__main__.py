@@ -76,18 +76,15 @@ class MyGame(Game):
 
 
 if __name__ == '__main__':
-    global mar_id, tanks_sprite_group
+    global mar_id, tanks_sprite_group, my_game
 
     tank_pict = pygame.transform.scale(load_picture('blue1.png'), (CELL_SZ, CELL_SZ))
+    tanks = dict()
 
     gk = GameClient()
     x, y, direction = gk.connect()
-    while not gk.connected:  # Вроже этот while можно убрать
+    while not gk.connected:  # Вроде этот while можно убрать
         sleep(0.1)
-    gk.start_listening_for_players_movements(player_movement_received)
-
-    tanks = dict()
-    tanks_sprite_group = pygame.sprite.Group()
 
     field_arr = gk.get_map()
 
@@ -96,11 +93,20 @@ if __name__ == '__main__':
 
     pygame.init()
     display_size = pygame.display.Info()
-    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111), field='cell field',
+    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111),
+                     field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
 
     tank = Tank(gk.id, my_game.field.add_object(gk.id[:2:], tank_pict, x, y))
+
+    for i in gk.get_all_players():
+        if i[0] != tank.id:
+            tanks[i[0]] = Tank(i[0], my_game.field.add_object(i[0], tank_pict, i[1], i[2]), x=i[1], y=i[2])
+
+    gk.start_listening_for_players_movements(player_movement_received)
+
+
     tanks[tank.id] = tank
 
     my_game.run()

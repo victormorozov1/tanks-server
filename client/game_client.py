@@ -55,3 +55,12 @@ class GameClient:
     def start_listening_for_players_movements(self, on_message_received):
         self.start_listening_for_messages(on_message_received,
                                           self._game_service.GetPlayersMovements(game_proto.Id(s=self.id)))
+
+    def get_all_players(self):
+        ret = []
+        print('ok')
+        for i in self._game_service.GetAllPlayers(game_proto.Nothing()):
+            print('in for')
+            ret.append((i.id, i.x, i.y))
+            print('appended')
+        return ret
