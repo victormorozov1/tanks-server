@@ -18,9 +18,10 @@ class GameClient:
 
     def connect(self):
         self.id = random_string(4)
-        self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900))
+        position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900))
         self.connected = True
         print('connected')
+        return position.x, position.y, position.direction
 
     def get_map(self):
         s = self._game_service.GetMap(game_proto.Nothing()).s

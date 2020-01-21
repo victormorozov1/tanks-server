@@ -33,7 +33,7 @@ class Map:
     def area_is_free(self, start_pos, szx, szy):
         x1, y1 = start_pos
         x2, y2 = x1 + szx - 1, y1 + szy - 1
-        return self.is_free(x1, y1), self.is_free(x2, y1), self.is_free(x1, y2), self.is_free(x2, y2)
+        return self.is_free(x1, y1) and self.is_free(x2, y1) and self.is_free(x1, y2) and self.is_free(x2, y2)
 
     def __str__(self):
         return SEPARATORS[0].join([SEPARATORS[1].join([str(i) for i in j]) for j in self.converted_map])

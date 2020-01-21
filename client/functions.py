@@ -1,5 +1,6 @@
 from random import randrange as rd
 import pygame
+from client.constants import *
 
 
 def open_picture(way):
@@ -15,6 +16,10 @@ def random_string(ln):
     for i in range(ln):
         ret += chr(rd(33, 125))
     return ret
+
+
+def load_picture(name):
+    return pygame.transform.scale(pygame.image.load('client/data/' + name), (CELL_SZ, CELL_SZ))
 
 
 if __name__ == '__main__':

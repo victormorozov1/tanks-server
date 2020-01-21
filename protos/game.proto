@@ -59,8 +59,14 @@ message Bullets{
     string s = 1;
 }
 
+message Position{
+    int32 x = 1;
+    int32 y = 2;
+    string direction = 3;
+}
+
 service Game {
-    rpc Connect (PlayerInformation) returns (Nothing);
+    rpc Connect (PlayerInformation) returns (Position);
 
     rpc GetMap (Nothing) returns (Map);
 

@@ -12,7 +12,7 @@ from game_server.files.field import *
 
 class GameService(game_grpc.GameServicer):
     def __init__(self):
-        self.map = Map(10, 10)
+        self.map = Map(N, N)
         self.n = N
         self.m = N
         self.sleep = 0.01
@@ -43,14 +43,14 @@ class GameService(game_grpc.GameServicer):
         client_win_size = request.szx, request.szy
         print('client win size', client_win_size)
 
-        self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size)
+        self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size,
+                                               player_id)
 
         print('returning nothing')
-        return game_proto.Nothing()
+        return game_proto.Position(x=x, y=y, direction='up')
 
     def GetPlayersMovements(self, request, context):
         player_id = request.s
-        print('player with id', player_id, 'want to get players movements')
         self.field.player_movements_information[player_id] = []
         while context.is_active():
             arr = self.field.player_movements_information[player_id]
@@ -60,26 +60,19 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetMap(self, request, context):
-        print('in get map')
         return game_proto.Map(s=str(self.map))
 
     def Move(self, request, context):
-        print('Move id=', end='')
-        print(request.s)
         player = self.field.players[request.s]
         player.is_moving = True
-        print('Move end')
         return game_proto.Nothing()
 
     def Turn(self, request, context):
-        print('turning id=', request.id, 'direction =', request.direction)
         self.field.players[request.id].tank.moving_direction = request.direction
         return game_proto.Nothing()
-    
+
     def Fire(self, request, context):
-        print('Fire')
         player_id = request.s
-        print('player_id =', player_id)
         try:
             self.field.players[player_id].tank.fire()
         except BaseException as e:
@@ -87,7 +80,6 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
-        print('player want\'s to get all bullets')
         while context.is_active():
             yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in self.field.bullets.values()]))
             sleep(self.sleep)
