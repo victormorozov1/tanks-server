@@ -30,8 +30,6 @@ class GameClient:
             ret.append([])
             for j in i.split(SEPARATORS[1]):
                 ret[-1].append(int(j))
-                print(j, end=' ')
-            print()
         return ret
 
     def move(self):
