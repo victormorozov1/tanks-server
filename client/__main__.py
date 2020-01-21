@@ -72,7 +72,7 @@ class MyGame(Game):
                 gk.turn('down')
 
     def game_iteration(self):
-        self.field.show(self.field.win, start=(tank.field_object.rect.x - self.field.szx // 2, tank.field_object.rect.y - self.field.szy // 2))
+        self.field.show(self.field.win, (self.szx, self.szy), start=(tank.field_object.rect.x - self.field.szx // 2, tank.field_object.rect.y - self.field.szy // 2))
 
 
 if __name__ == '__main__':
@@ -94,7 +94,9 @@ if __name__ == '__main__':
     field_dict = dict()
     field_dict[10] = load_picture('box.png')
 
-    my_game = MyGame(900, 900, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111), field='cell field',
+    pygame.init()
+    display_size = pygame.display.Info()
+    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111), field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
 
