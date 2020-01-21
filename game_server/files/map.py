@@ -28,7 +28,14 @@ class Map:
                 self.converted_map[-1].append(WALLS[self.map[i][j]])
 
     def is_free(self, x, y):
-        return self.map[x // CELL_SZ][y // CELL_SZ] == '.'
+        print(f'free x={x}, y={y}')
+        print(f'coords: ({y//CELL_SZ}, {x // CELL_SZ}')
+        print(self.map[y // CELL_SZ][x // CELL_SZ])
+        for i in self.map:
+            for j in i:
+                print(j, end='')
+            print()
+        return self.map[y // CELL_SZ][x // CELL_SZ] == '.'
 
     def area_is_free(self, start_pos, szx, szy):
         x1, y1 = start_pos

@@ -12,7 +12,6 @@ from game_server.files.field import *
 
 class GameService(game_grpc.GameServicer):
     def __init__(self):
-        self.map = Map(N, N)
         self.n = N
         self.m = N
         self.sleep = 0.01
@@ -60,7 +59,7 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetMap(self, request, context):
-        return game_proto.Map(s=str(self.map))
+        return game_proto.Map(s=str(self.field.map))
 
     def Move(self, request, context):
         player = self.field.players[request.s]

@@ -92,7 +92,6 @@ if __name__ == '__main__':
     field_arr = gk.get_map()
 
     field_dict = dict()
-    field_dict[0] = load_picture('grass.png')
     field_dict[10] = load_picture('box.png')
 
     my_game = MyGame(900, 900, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111), field='cell field',

@@ -6,10 +6,10 @@ from game_server.grpc_out import game_pb2 as game_proto, game_pb2_grpc as game_g
 
 class Field:
     def __init__(self):
-        self.map = Map(N, N)
         self.players = dict()
         self.bullets = dict()
         self.player_movements_information = dict()
+        self.map = Map(N, N)
 
     def free(self, x, y, sz, ignore=[]):
         print(f'is ({x}, {y}) free?', end=' ')
