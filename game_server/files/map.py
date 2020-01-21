@@ -16,7 +16,7 @@ class Map:
                 if j in [0, self.m - 1] or i in [0, self.n - 1]:
                     self.map[-1].append('#')
                 elif i % 2 == 0:
-                    self.map[-1].append(['.', '.'][rd(9) // 6])
+                    self.map[-1].append(['#', '.'][rd(9) // 6])
                 else:
                     self.map[-1].append(['.', '.'][rd(7) // 6])
 
@@ -28,13 +28,6 @@ class Map:
                 self.converted_map[-1].append(WALLS[self.map[i][j]])
 
     def is_free(self, x, y):
-        print(f'free x={x}, y={y}')
-        print(f'coords: ({y//CELL_SZ}, {x // CELL_SZ}')
-        print(self.map[y // CELL_SZ][x // CELL_SZ])
-        for i in self.map:
-            for j in i:
-                print(j, end='')
-            print()
         return self.map[y // CELL_SZ][x // CELL_SZ] == '.'
 
     def area_is_free(self, start_pos, szx, szy):

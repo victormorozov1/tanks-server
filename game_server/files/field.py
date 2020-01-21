@@ -12,7 +12,6 @@ class Field:
         self.map = Map(N, N)
 
     def free(self, x, y, sz, ignore=[]):
-        print(f'is ({x}, {y}) free?', end=' ')
         for id, i in self.players.items():
             if i not in ignore and id not in ignore:
                 if abs(x - i.tank.x) < sz and abs(y - i.tank.y) < sz:
