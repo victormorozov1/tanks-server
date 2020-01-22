@@ -1,6 +1,6 @@
 from client.game_client import GameClient
 import pygame
-from client.game.game import Game
+from client.field.game import Game
 from client.constants import *
 from client.functions import *
 
