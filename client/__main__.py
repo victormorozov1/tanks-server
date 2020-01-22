@@ -1,11 +1,10 @@
 import pygame, os
 from client.game_client import *
 from time import sleep
-from client.field.game import Game
+from client.drawing.game import Game
 import pygame
-from random import randrange as rd
-from client.field.functions import *
-from client.constants import *
+from client.drawing.constants import *
+from client.drawing.pictures import *
 
 
 def player_movement_received(message):
@@ -23,6 +22,18 @@ def player_turn_received(message):
         tanks[id].turn(direction)
     else:
         print(f'ERROR: received new tank turn with id={id}')
+
+
+def bullets_received(message):
+    my_game.field.bullets = []
+    rec = 0
+    for i in message.s.split(SEPARATORS[1]):
+        rec += 1
+        try:
+            x, y = [int(j) for j in i.split(SEPARATORS[0])]
+            my_game.field.bullets.append((x, y))
+        except BaseException:
+            pass
 
 
 class Tank:
@@ -82,6 +93,8 @@ class MyGame(Game):
                 gk.turn('up')
             elif ev.key == pygame.K_DOWN:
                 gk.turn('down')
+            elif ev.key == pygame.K_SPACE:
+                gk.fire()
 
     def game_iteration(self):
         self.field.show(self.field.win, (self.szx, self.szy), start=(tank.field_object.rect.x - self.field.szx // 2, tank.field_object.rect.y - self.field.szy // 2))
@@ -90,8 +103,8 @@ class MyGame(Game):
 if __name__ == '__main__':
     global mar_id, tanks_sprite_group, my_game
 
-    tank_pict = pygame.transform.scale(load_picture('blue1.png'), (CELL_SZ, CELL_SZ))
     tanks = dict()
+    bullets = []
 
     gk = GameClient()
     x, y, direction = gk.connect()
@@ -105,7 +118,7 @@ if __name__ == '__main__':
 
     pygame.init()
     display_size = pygame.display.Info()
-    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=50, bg=(122, 233, 111),
+    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=CELL_SZ, bg=(122, 233, 111),
                      field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
@@ -118,6 +131,7 @@ if __name__ == '__main__':
 
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)
+    gk.start_listening_for_bullets_positions(bullets_received)
 
     tanks[tank.id] = tank
 

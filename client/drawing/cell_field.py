@@ -1,8 +1,9 @@
 import pygame
-from client.field.field import Field
+from client.drawing.field import Field
 from random import randrange as rd
-from client.field.functions import *
-from client.constants import *
+from client.drawing.functions import *
+from client.drawing.constants import *
+from client.drawing.pictures import *
 
 
 class CellField(Field):
@@ -15,6 +16,7 @@ class CellField(Field):
         self.m = szy // cell_sz
         self.szx = szx
         self.szy = szy
+        self.bullets = []
 
     def draw_field(self, win, win_sz, start=(0, 0)):
         for i in range(max(0, start[1] // CELL_SZ), min(len(self.field_arr), start[1] // CELL_SZ + win_sz[1] // CELL_SZ + 2)):
@@ -33,4 +35,6 @@ class CellField(Field):
         win.fill(self.bg)
         self.draw_field(win, win_sz, start=start)
         self.draw_objects(self.win, start=start)
+        for i in self.bullets:
+            win.blit(bullet_pict, (i[0] - start[0], i[1] - start[1]))
         pygame.display.update()

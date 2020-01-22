@@ -1,7 +1,7 @@
-from client.field.field import Field
+from client.drawing.field import Field
 import pygame
 from time import sleep
-from client.field.cell_field import CellField
+from client.drawing.cell_field import CellField
 
 
 class Game:

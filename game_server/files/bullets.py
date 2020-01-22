@@ -41,6 +41,24 @@ class Bullet:  # В классе храняться координаты ЦЕН�
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
+        elif self.moving_direction == 'down':
+            for i in range(self.speed):
+                self.y += 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.check_for_hit_on_target()
+                if self.deleted:
+                    break
+        elif self.moving_direction == 'left':
+            for i in range(self.speed):
+                self.x -= 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.check_for_hit_on_target()
+                if self.deleted:
+                    break
+        elif self.moving_direction == 'right':
+            for i in range(self.speed):
+                self.x += 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.check_for_hit_on_target()
+                if self.deleted:
+                    break
 
     def __str__(self):
         return SEPARATORS[0].join(

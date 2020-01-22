@@ -1,5 +1,4 @@
-
-from client.field.object import Object
+from client.drawing.object import Object
 import pygame
 
 

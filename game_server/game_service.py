@@ -10,7 +10,6 @@ from game_server.files.tanks import *
 from game_server.files.field import *
 
 
-
 class GameService(game_grpc.GameServicer):
     def __init__(self):
         self.n = N
@@ -27,6 +26,7 @@ class GameService(game_grpc.GameServicer):
         for id, bullet in self.field.bullets.items():
             if bullet.deleted:
                 deleted_bullets_id.append(id)
+                print('not del')
             else:
                 bullet.move()
         for i in deleted_bullets_id:
