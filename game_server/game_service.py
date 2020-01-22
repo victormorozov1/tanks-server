@@ -115,3 +115,13 @@ class GameService(game_grpc.GameServicer):
             return game_proto.Name(s=self.names[request.s])
         except BaseException as e:
             print('1', e)
+
+    def GetPlayersHealthsChanging(self, request, context):
+        player_id = request.s
+        self.field.players_healths_changing_information[player_id] = []
+        while context.is_active():
+            arr = self.field.players_healths_changing_information[player_id]
+            self.field.player_turns_information[player_id] = []
+            for i in arr:
+                yield i
+            sleep(self.sleep)

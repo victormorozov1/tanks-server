@@ -60,6 +60,10 @@ class GameClient:
         self.start_listening_for_messages(on_message_received,
                                           self._game_service.GetPlayersTurns(game_proto.Id(s=self.id)))
 
+    def start_listening_for_healths_changing(self, on_message_received):
+        self.start_listening_for_messages(on_message_received,
+                                          self._game_service.GetPlayersHealthsChanging(game_proto.Id(s=self.id)))
+
     def get_all_players(self):
         ret = []
         print('ok')
@@ -74,5 +78,7 @@ class GameClient:
         ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
         print('ret rec')
         return ret.s
+
+
 
 

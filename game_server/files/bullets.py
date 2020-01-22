@@ -1,5 +1,6 @@
 from game_server.files.functions import *
 from game_server.files.constants import *
+from game_server.grpc_out import game_pb2 as game_proto
 
 
 class Bullet:  # В классе храняться координаты ЦЕНТРА снаряда
@@ -20,6 +21,9 @@ class Bullet:  # В классе храняться координаты ЦЕН�
             tank = player.tank
             if object_to_point_diff(tank, (self.x, self.y)) < self.radius:
                 tank.healths -= self.damage
+                for i in self.field.players_healths_changing_information.keys():
+                    self.field.players_healths_changing_information[i].append(
+                        game_proto.HealthsChanging(id=i[:2:], change=-self.damage))
                 self.deleted = True
 
         arr_x = [self.x - self.radius, self.x + self.radius]
@@ -39,4 +43,5 @@ class Bullet:  # В классе храняться координаты ЦЕН�
                     break
 
     def __str__(self):
-        return SEPARATORS[0].join([str(self.x), str(self.y)])  # Если улучшать игру то нажно будет добавить другую информацию
+        return SEPARATORS[0].join(
+            [str(self.x), str(self.y)])  # Если улучшать игру то нажно будет добавить другую информацию

@@ -10,6 +10,7 @@ class Field:
         self.bullets = dict()
         self.player_movements_information = dict()
         self.player_turns_information = dict()
+        self.players_healths_changing_information = dict()
         self.map = Map(N, N)
 
     def free(self, x, y, sz, ignore=[]):
