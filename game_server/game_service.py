@@ -10,6 +10,7 @@ from game_server.files.tanks import *
 from game_server.files.field import *
 
 
+
 class GameService(game_grpc.GameServicer):
     def __init__(self):
         self.n = N
