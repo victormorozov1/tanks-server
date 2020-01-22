@@ -44,6 +44,16 @@ class GameStub(object):
         request_serializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.SerializeToString,
         response_deserializer=game__server_dot_grpc__out_dot_game__pb2.OtherPlayerInformation.FromString,
         )
+    self.GetPlayersHealthsChanging = channel.unary_stream(
+        '/grpc.Game/GetPlayersHealthsChanging',
+        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
+        response_deserializer=game__server_dot_grpc__out_dot_game__pb2.HealthsChanging.FromString,
+        )
+    self.GetPlayerName = channel.unary_unary(
+        '/grpc.Game/GetPlayerName',
+        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
+        response_deserializer=game__server_dot_grpc__out_dot_game__pb2.Name.FromString,
+        )
     self.Move = channel.unary_unary(
         '/grpc.Game/Move',
         request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
@@ -107,6 +117,20 @@ class GameServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetPlayersHealthsChanging(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetPlayerName(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def Move(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -160,6 +184,16 @@ def add_GameServicer_to_server(servicer, server):
           servicer.GetAllPlayers,
           request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Nothing.FromString,
           response_serializer=game__server_dot_grpc__out_dot_game__pb2.OtherPlayerInformation.SerializeToString,
+      ),
+      'GetPlayersHealthsChanging': grpc.unary_stream_rpc_method_handler(
+          servicer.GetPlayersHealthsChanging,
+          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Id.FromString,
+          response_serializer=game__server_dot_grpc__out_dot_game__pb2.HealthsChanging.SerializeToString,
+      ),
+      'GetPlayerName': grpc.unary_unary_rpc_method_handler(
+          servicer.GetPlayerName,
+          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Id.FromString,
+          response_serializer=game__server_dot_grpc__out_dot_game__pb2.Name.SerializeToString,
       ),
       'Move': grpc.unary_unary_rpc_method_handler(
           servicer.Move,

@@ -16,6 +16,7 @@ class GameService(game_grpc.GameServicer):
         self.m = N
         self.sleep = 0.01
         self.field = Field()
+        self.names = dict()
 
     def game_iteration(self):
         for id in self.field.players.keys():
@@ -31,15 +32,17 @@ class GameService(game_grpc.GameServicer):
             del self.field.bullets[i]
 
     def Connect(self, request, context):
-
+        print(f'player {request.name} connected')
         x, y = self.field.free_cell()
 
-        player_id = request.id
+        player_id, player_name = request.id, request.name
 
         client_win_size = request.szx, request.szy
 
         self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size,
-                                               player_id)
+                                               player_id, player_name)
+        self.names[player_id] = player_name
+        self.names[player_id[:2:]] = player_name
 
         self.field.players[player_id].is_moving = True  # Заставляем игрока двинуться 1 раз чтобы его увидели другие
 
@@ -102,3 +105,13 @@ class GameService(game_grpc.GameServicer):
             for i in arr:
                 yield i
             sleep(self.sleep)
+
+    def GetPlayerName(self, request, context):
+        print('in get name')
+        id = request.s
+        print('id =', id)
+        print(self.names.keys())
+        try:
+            return game_proto.Name(s=self.names[request.s])
+        except BaseException as e:
+            print('1', e)

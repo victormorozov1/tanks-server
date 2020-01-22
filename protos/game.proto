@@ -13,6 +13,7 @@ message PlayerInformation {
     string id = 1;
     int32 szx = 2;
     int32 szy = 3;
+    string name = 4;
 }
 
 message GameInformation {
@@ -71,6 +72,15 @@ message OtherPlayerInformation{
     int32 y = 3;
 }
 
+message HealthsChanging{
+    int32 id = 1;
+    int32 change = 2;
+}
+
+message Name{
+    string s = 1;
+}
+
 service Game {
     rpc Connect (PlayerInformation) returns (Position);
 
@@ -80,6 +90,8 @@ service Game {
     rpc GetPlayersTurns (Id) returns (stream PlayerTurn); // Не обязательныя для подключения функция, её можно использовать чтобы видеть в какую сторону направлен танк противника
     rpc GetAllBullets (Nothing) returns (stream Bullets);
     rpc GetAllPlayers (Nothing) returns (stream OtherPlayerInformation);
+    rpc GetPlayersHealthsChanging (Id) returns (stream HealthsChanging);
+    rpc GetPlayerName(Id) returns (Name);
 
     rpc Move (Id) returns (Nothing);
     rpc Turn (TurnMessage) returns (Nothing);

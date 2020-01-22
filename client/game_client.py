@@ -16,9 +16,9 @@ class GameClient:
         self.move_y = 0
         self.connected = False  # Не забыть проверить на подключение если будет ошибка
 
-    def connect(self):
+    def connect(self, name='CucumbeR'):
         self.id = random_string(4)
-        position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900))
+        position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900, name=name))
         self.connected = True
         print('connected')
         return position.x, position.y, position.direction
@@ -68,5 +68,11 @@ class GameClient:
             ret.append((i.id, i.x, i.y))
             print('appended')
         return ret
+
+    def get_player_name(self, id):
+        print('in get player name')
+        ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
+        print('ret rec')
+        return ret.s
 
 
