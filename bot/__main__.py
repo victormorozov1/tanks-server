@@ -12,6 +12,10 @@ if __name__ == '__main__':
     while True:
         if rd(40) < 37:
             gk.move()
+            sleep(0.1)
+            if rd(10) == 5:
+                gk.fire()
+                print('fire')
         else:
             gk.turn(choice(['left', 'right', 'up', 'down']))
         sleep(0.03)

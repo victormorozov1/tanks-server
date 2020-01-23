@@ -16,9 +16,9 @@ class GameClient:
         self.move_y = 0
         self.connected = False  # Не забыть проверить на подключение если будет ошибка
 
-    def connect(self):
+    def connect(self, name='CucumbeR'):
         self.id = random_string(4)
-        position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900))
+        position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900, name=name))
         self.connected = True
         print('connected')
         return position.x, position.y, position.direction
@@ -56,7 +56,11 @@ class GameClient:
         self.start_listening_for_messages(on_message_received,
                                           self._game_service.GetPlayersMovements(game_proto.Id(s=self.id)))
 
-    def start_listening_for_players_healths_changing(self, on_message_received):
+    def start_listening_for_players_turns(self, on_message_received):
+        self.start_listening_for_messages(on_message_received,
+                                          self._game_service.GetPlayersTurns(game_proto.Id(s=self.id)))
+
+    def start_listening_for_healths_changing(self, on_message_received):
         self.start_listening_for_messages(on_message_received,
                                           self._game_service.GetPlayersHealthsChanging(game_proto.Id(s=self.id)))
 
@@ -68,3 +72,13 @@ class GameClient:
             ret.append((i.id, i.x, i.y))
             print('appended')
         return ret
+
+    def get_player_name(self, id):
+        print('in get player name')
+        ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
+        print('ret rec')
+        return ret.s
+
+
+
+

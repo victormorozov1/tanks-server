@@ -8,6 +8,7 @@ from game_server.files.map import *
 from game_server.files.player import *
 from game_server.files.tanks import *
 from game_server.files.field import *
+import copy
 
 
 class GameService(game_grpc.GameServicer):
@@ -30,6 +31,7 @@ class GameService(game_grpc.GameServicer):
             del self.field.players[i]
 
         deleted_bullets_id = []
+
         for id, bullet in self.field.bullets.items():
             if bullet.deleted:
                 deleted_bullets_id.append(id)

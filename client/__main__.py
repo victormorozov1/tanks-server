@@ -5,6 +5,7 @@ from client.drawing.game import Game
 import pygame
 from client.drawing.constants import *
 from client.drawing.pictures import *
+from client.drawing.get_name import get_name
 
 
 def delete_tank(id):
@@ -60,6 +61,7 @@ class Tank:
                          'left': pygame.transform.rotate(picture, -90),
                          'right': pygame.transform.rotate(picture, 90)}
         my_game.field.add_object(id, self)
+        self.name = gk.get_player_name(id)
 
     def move_on(self, move_x, move_y):
         self.x += move_x
@@ -71,7 +73,11 @@ class Tank:
     def draw(self, win, start=(0, 0)):
         win.blit(self.picture, (self.x - start[0], self.y - start[1]))  # Отрисовка танка
         pygame.draw.rect(win, (255 - self.healths * 2, self.healths * 2, 0),  # Отрисовка линии здоровья
-                         (self.x - start[0], self.y - 15 - start[1], int(CELL_SZ * self.healths / 100), 5))
+                         (self.x - start[0], self.y - 17 - start[1], int(CELL_SZ * self.healths / 100), 5))
+
+        f1 = pygame.font.Font(None, 18)
+        text = f1.render(self.name, 1, (255, 255, 255))
+        win.blit(text, (self.x - start[0], self.y - 12 - start[1]))
 
     def turn_up(self):
         self.turn('up')
@@ -118,17 +124,25 @@ class MyGame(Game):
                 gk.fire()
 
     def game_iteration(self):
-        self.field.show(self.field.win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
+        self.field.show(win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
+
+
+
 
 
 if __name__ == '__main__':
-    global mar_id, tanks_sprite_group, my_game
+    global mar_id, tanks_sprite_group, my_game, gk
 
     tanks = dict()
     bullets = []
 
+    pygame.init()
+    display_size = pygame.display.Info()
+    szx, szy = display_size.current_w, display_size.current_h
+    win = pygame.display.set_mode((szx, szy))
+
     gk = GameClient()
-    x, y, direction = gk.connect()
+    x, y, direction = gk.connect(name=get_name(win, 5, (szx // 2 - 30, szy // 2)))
     while not gk.connected:  # Вроде этот while можно убрать
         sleep(0.1)
 
@@ -137,9 +151,7 @@ if __name__ == '__main__':
     field_dict = dict()
     field_dict[10] = load_picture('box.png')
 
-    pygame.init()
-    display_size = pygame.display.Info()
-    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
+    my_game = MyGame(szx, szy, win, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
                      field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)

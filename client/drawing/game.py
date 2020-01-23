@@ -5,7 +5,7 @@ from client.drawing.cell_field import CellField
 
 
 class Game:
-    def __init__(self, szx, szy, bg=(255, 255, 255), sleep=0.01, field='simple field', field_arr=None,
+    def __init__(self, szx, szy, win, bg=(255, 255, 255), sleep=0.01, field='simple field', field_arr=None,
                  field_dict=None, cell_field_sz=64):
         if field == 'simple field':
             self.field = Field(szx, szy, bg=bg)

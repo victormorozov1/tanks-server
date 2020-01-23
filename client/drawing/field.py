@@ -10,7 +10,6 @@ class Field:
         self.bg = bg
         self.objects = dict()
         pygame.init()
-        self.win = pygame.display.set_mode((self.szx, self.szy))
 
     def remove_all_objects(self):
         self.objects = pygame.sprite.Group()
