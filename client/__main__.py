@@ -12,19 +12,10 @@ def delete_tank(id):
     del tanks[id]
 
 
-def player_healts_change_received(message):
-    print('----')
-    for id, tank in tanks.items():
-        print(id)
-    print('----')
+def player_healths_change_received(message):
     tanks[message.id].healths = message.change
     if message.change <= 0:
-        print('deleteng tank wiht id =', message.id)
         delete_tank(message.id)
-        print('--2--')
-        for id, tank in tanks.items():
-            print(id)
-        print('--2--')
 
 
 def player_movement_received(message):
@@ -57,20 +48,28 @@ def bullets_received(message):
 
 
 class Tank:
-    def __init__(self, id, field_object, direction='up', x=-100, y=-100, healths=100):
-        self.field_object = field_object
-        self.field_object.x = x
-        self.field_object.y = y
+    def __init__(self, id, picture=tank_pict, direction='up', x=-100, y=-100, healths=100):
+        self.x = x
+        self.y = y
         self.id = id[:2:]
         self.direction = direction
         self.healths = healths
+        self.picture = picture
+        self.pictures = {'down': picture,
+                         'up': pygame.transform.rotate(picture, 180),
+                         'left': pygame.transform.rotate(picture, -90),
+                         'right': pygame.transform.rotate(picture, 90)}
+        my_game.field.add_object(id, self)
 
     def move_on(self, move_x, move_y):
-        self.field_object.rect.x += move_x
-        self.field_object.rect.y += move_y
+        self.x += move_x
+        self.y += move_y
 
     def move_to(self, new_x, new_y):
-        self.field_object.rect.x, self.field_object.rect.y = new_x, new_y
+        self.x, self.y = new_x, new_y
+
+    def draw(self, win, start=(0, 0)):
+        win.blit(self.picture, (self.x - start[0], self.y - start[1]))
 
     def turn_up(self):
         self.turn('up')
@@ -85,8 +84,7 @@ class Tank:
         self.turn('right')
 
     def turn(self, direction):
-        self.direction = direction
-        self.field_object.turn(direction)
+        self.picture = self.pictures[direction]
 
 
 class MyGame(Game):
@@ -118,7 +116,7 @@ class MyGame(Game):
                 gk.fire()
 
     def game_iteration(self):
-        self.field.show(self.field.win, (self.szx, self.szy), start=(tank.field_object.rect.x - self.field.szx // 2, tank.field_object.rect.y - self.field.szy // 2))
+        self.field.show(self.field.win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
 
 
 if __name__ == '__main__':
@@ -144,16 +142,16 @@ if __name__ == '__main__':
                      field_arr=field_arr,
                      field_dict=field_dict)
 
-    tank = Tank(gk.id, my_game.field.add_object(gk.id[:2:], tank_pict, x, y))
+    tank = Tank(gk.id)
 
     for i in gk.get_all_players():
         if i[0] != tank.id:
-            tanks[i[0]] = Tank(i[0], my_game.field.add_object(i[0], tank_pict, i[1], i[2]), x=i[1], y=i[2])
+            tanks[i[0]] = Tank(i[0], x=i[1], y=i[2])
 
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)
     gk.start_listening_for_bullets_positions(bullets_received)
-    gk.start_listening_for_healths_changing(player_healts_change_received)
+    gk.start_listening_for_healths_changing(player_healths_change_received)
 
     tanks[tank.id] = tank
 

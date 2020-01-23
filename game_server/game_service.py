@@ -128,11 +128,9 @@ class GameService(game_grpc.GameServicer):
         player_id = request.s
         self.field.players_healths_changing_information[player_id] = []
         while context.is_active():
-            print('ca')
             try:
                 arr = self.field.players_healths_changing_information[player_id]
                 for i in arr:
-                    print('returning to ', player_id)
                     yield i
                 self.field.players_healths_changing_information[player_id] = []
             except BaseException as e:

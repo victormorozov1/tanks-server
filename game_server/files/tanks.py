@@ -37,4 +37,4 @@ class Tank:
             y = self.y + TANK_SZ + BULLET_INDENT
 
         self.field.bullets[self.id + str(self.num_fired_bullets)] = (
-            Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.moving_direction, 100, self.field))
+            Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.moving_direction, BULLET_DAMAGE, self.field))

@@ -8,15 +8,15 @@ class Field:
         self.szy = szy
         self.last_id = 0
         self.bg = bg
-        self.objects = pygame.sprite.Group()
+        self.objects = dict()
         pygame.init()
         self.win = pygame.display.set_mode((self.szx, self.szy))
 
     def remove_all_objects(self):
         self.objects = pygame.sprite.Group()
 
-    def add_object(self, id, picture, x, y):
-        obj = Object(id, picture, x, y, self.objects)
+    def add_object(self, id, obj):
+        self.objects[id] = obj
         return obj
 
     def get_object_by_id(self, id):
@@ -26,10 +26,7 @@ class Field:
         return False
 
     def remove_object(self, id):
-        for i in self.objects:
-            if i.id == id:
-                i.kill()
-                break
+        del self.objects[id]
 
     def move_object_to(self, id, x, y):
         obj = self.get_object_by_id(id)
