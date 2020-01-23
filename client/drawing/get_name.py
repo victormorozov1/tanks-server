@@ -38,7 +38,6 @@ def get_name(win, max_len, pos):
                     else:
                         text += event.unicode
 
-        win.fill((30, 30, 30))
         # Render the current text.
         txt_surface = font.render(text, True, color)
         # Resize the box if the text is too long.

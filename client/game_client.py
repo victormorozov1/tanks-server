@@ -16,7 +16,7 @@ class GameClient:
         self.move_y = 0
         self.connected = False  # Не забыть проверить на подключение если будет ошибка
 
-    def connect(self, name='CucumbeR'):
+    def connect(self, name='Cucumber'):
         self.id = random_string(4)
         position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900, name=name))
         self.connected = True
@@ -69,7 +69,7 @@ class GameClient:
         print('ok')
         for i in self._game_service.GetAllPlayers(game_proto.Nothing()):
             print('in for')
-            ret.append((i.id, i.x, i.y))
+            ret.append((i.id, i.x, i.y, i.healths))
             print('appended')
         return ret
 

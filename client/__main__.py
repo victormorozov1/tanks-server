@@ -6,6 +6,7 @@ import pygame
 from client.drawing.constants import *
 from client.drawing.pictures import *
 from client.drawing.get_name import get_name
+from random import choice
 
 
 def delete_tank(id):
@@ -55,13 +56,13 @@ class Tank:
         self.id = id[:2:]
         self.direction = direction
         self.healths = healths
-        self.picture = picture
         self.pictures = {'down': picture,
                          'up': pygame.transform.rotate(picture, 180),
                          'left': pygame.transform.rotate(picture, -90),
                          'right': pygame.transform.rotate(picture, 90)}
         my_game.field.add_object(id, self)
         self.name = gk.get_player_name(id)
+        self.turn(self.direction)
 
     def move_on(self, move_x, move_y):
         self.x += move_x
@@ -127,9 +128,6 @@ class MyGame(Game):
         self.field.show(win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
 
 
-
-
-
 if __name__ == '__main__':
     global mar_id, tanks_sprite_group, my_game, gk
 
@@ -137,12 +135,12 @@ if __name__ == '__main__':
     bullets = []
 
     pygame.init()
-    display_size = pygame.display.Info()
-    szx, szy = display_size.current_w, display_size.current_h
-    win = pygame.display.set_mode((szx, szy))
+    win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
+    win.blit(choice(savers), (0, 0))
+
 
     gk = GameClient()
-    x, y, direction = gk.connect(name=get_name(win, 5, (szx // 2 - 30, szy // 2)))
+    x, y, direction = gk.connect(name=get_name(win, 5, (SZX // 2 - 30, SZY // 2)))
     while not gk.connected:  # Вроде этот while можно убрать
         sleep(0.1)
 
@@ -151,16 +149,16 @@ if __name__ == '__main__':
     field_dict = dict()
     field_dict[10] = load_picture('box.png')
 
-    my_game = MyGame(szx, szy, win, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
+    my_game = MyGame(SZX, SZY, win, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
                      field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
 
-    tank = Tank(gk.id)
+    tank = Tank(gk.id, x=x, y=y, direction=direction)
 
     for i in gk.get_all_players():
         if i[0] != tank.id:
-            tanks[i[0]] = Tank(i[0], x=i[1], y=i[2])
+            tanks[i[0]] = Tank(i[0], x=i[1], y=i[2], healths=i[3])
 
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)

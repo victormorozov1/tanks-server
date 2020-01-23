@@ -101,7 +101,7 @@ class GameService(game_grpc.GameServicer):
         print('in get all players')
         for i in self.field.players.values():
             try:
-                yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y)
+                yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y, healths=i.tank.healths)
             except BaseException as e:
                 print(e)
         print('end')

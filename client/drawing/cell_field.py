@@ -27,8 +27,11 @@ class CellField(Field):
                         win.blit(self.field_dict[self.field_arr[i][j]], pos)
 
     def draw_objects(self, win, start=(0, 0)):
-        for i in self.objects.values():
-            i.draw(win, start=start)
+        try:
+            for i in self.objects.values():
+                i.draw(win, start=start)
+        except BaseException as e:
+            print(e)
 
     def show(self, win, win_sz, start=(0, 0)):
         win.fill(self.bg)
