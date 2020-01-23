@@ -20,25 +20,28 @@ class GameService(game_grpc.GameServicer):
         self.names = dict()
 
     def game_iteration(self):
-        for id in self.field.players.keys():
-            self.field.make_step(id)
+        try:
+            for id in self.field.players.keys():
+                self.field.make_step(id)
 
-        delete_tanks = []
-        for i in self.field.players.keys():
-            if self.field.players[i].tank.healths <= 0:
-                delete_tanks.append(i)
-        for i in delete_tanks:
-            del self.field.players[i]
+            delete_tanks = []
+            for i in self.field.players.keys():
+                if self.field.players[i].tank.healths <= 0:
+                    delete_tanks.append(i)
+            for i in delete_tanks:
+                del self.field.players[i]
 
-        deleted_bullets_id = []
+            deleted_bullets_id = []
 
-        for id, bullet in self.field.bullets.items():
-            if bullet.deleted:
-                deleted_bullets_id.append(id)
-            else:
-                bullet.move()
-        for i in deleted_bullets_id:
-            del self.field.bullets[i]
+            for id, bullet in self.field.bullets.items():
+                if bullet.deleted:
+                    deleted_bullets_id.append(id)
+                else:
+                    bullet.move()
+            for i in deleted_bullets_id:
+                del self.field.bullets[i]
+        except BaseException as e:
+            print(e)
 
     def Connect(self, request, context):
         x, y = self.field.free_cell()
