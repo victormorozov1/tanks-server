@@ -73,8 +73,8 @@ message OtherPlayerInformation{
 }
 
 message HealthsChanging{
-    int32 id = 1;
-    int32 change = 2;
+    string id = 1;
+    int32 change = 2; // Лучше будет переименовать в new_healths
 }
 
 message Name{

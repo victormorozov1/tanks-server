@@ -7,6 +7,26 @@ from client.drawing.constants import *
 from client.drawing.pictures import *
 
 
+def delete_tank(id):
+    my_game.field.remove_object(id)
+    del tanks[id]
+
+
+def player_healts_change_received(message):
+    print('----')
+    for id, tank in tanks.items():
+        print(id)
+    print('----')
+    tanks[message.id].healths = message.change
+    if message.change <= 0:
+        print('deleteng tank wiht id =', message.id)
+        delete_tank(message.id)
+        print('--2--')
+        for id, tank in tanks.items():
+            print(id)
+        print('--2--')
+
+
 def player_movement_received(message):
     id, new_x, new_y = message.id, message.new_x, message.new_y
     if id in tanks.keys():
@@ -37,12 +57,13 @@ def bullets_received(message):
 
 
 class Tank:
-    def __init__(self, id, field_object, direction='up', x=-100, y=-100):
+    def __init__(self, id, field_object, direction='up', x=-100, y=-100, healths=100):
         self.field_object = field_object
         self.field_object.x = x
         self.field_object.y = y
         self.id = id[:2:]
         self.direction = direction
+        self.healths = healths
 
     def move_on(self, move_x, move_y):
         self.field_object.rect.x += move_x
@@ -66,7 +87,7 @@ class Tank:
     def turn(self, direction):
         self.direction = direction
         self.field_object.turn(direction)
-    
+
 
 class MyGame(Game):
     def __init__(self, *args, **kwargs):
@@ -132,6 +153,7 @@ if __name__ == '__main__':
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)
     gk.start_listening_for_bullets_positions(bullets_received)
+    gk.start_listening_for_healths_changing(player_healts_change_received)
 
     tanks[tank.id] = tank
 

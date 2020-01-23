@@ -17,7 +17,7 @@ class GameStub(object):
     self.Connect = channel.unary_unary(
         '/grpc.Game/Connect',
         request_serializer=game__pb2.PlayerInformation.SerializeToString,
-        response_deserializer=game__pb2.Nothing.FromString,
+        response_deserializer=game__pb2.Position.FromString,
         )
     self.GetMap = channel.unary_unary(
         '/grpc.Game/GetMap',
@@ -31,13 +31,28 @@ class GameStub(object):
         )
     self.GetPlayersTurns = channel.unary_stream(
         '/grpc.Game/GetPlayersTurns',
-        request_serializer=game__pb2.Nothing.SerializeToString,
+        request_serializer=game__pb2.Id.SerializeToString,
         response_deserializer=game__pb2.PlayerTurn.FromString,
         )
     self.GetAllBullets = channel.unary_stream(
         '/grpc.Game/GetAllBullets',
         request_serializer=game__pb2.Nothing.SerializeToString,
         response_deserializer=game__pb2.Bullets.FromString,
+        )
+    self.GetAllPlayers = channel.unary_stream(
+        '/grpc.Game/GetAllPlayers',
+        request_serializer=game__pb2.Nothing.SerializeToString,
+        response_deserializer=game__pb2.OtherPlayerInformation.FromString,
+        )
+    self.GetPlayersHealthsChanging = channel.unary_stream(
+        '/grpc.Game/GetPlayersHealthsChanging',
+        request_serializer=game__pb2.Id.SerializeToString,
+        response_deserializer=game__pb2.HealthsChanging.FromString,
+        )
+    self.GetPlayerName = channel.unary_unary(
+        '/grpc.Game/GetPlayerName',
+        request_serializer=game__pb2.Id.SerializeToString,
+        response_deserializer=game__pb2.Name.FromString,
         )
     self.Move = channel.unary_unary(
         '/grpc.Game/Move',
@@ -95,6 +110,27 @@ class GameServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetAllPlayers(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetPlayersHealthsChanging(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetPlayerName(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def Move(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -122,7 +158,7 @@ def add_GameServicer_to_server(servicer, server):
       'Connect': grpc.unary_unary_rpc_method_handler(
           servicer.Connect,
           request_deserializer=game__pb2.PlayerInformation.FromString,
-          response_serializer=game__pb2.Nothing.SerializeToString,
+          response_serializer=game__pb2.Position.SerializeToString,
       ),
       'GetMap': grpc.unary_unary_rpc_method_handler(
           servicer.GetMap,
@@ -136,13 +172,28 @@ def add_GameServicer_to_server(servicer, server):
       ),
       'GetPlayersTurns': grpc.unary_stream_rpc_method_handler(
           servicer.GetPlayersTurns,
-          request_deserializer=game__pb2.Nothing.FromString,
+          request_deserializer=game__pb2.Id.FromString,
           response_serializer=game__pb2.PlayerTurn.SerializeToString,
       ),
       'GetAllBullets': grpc.unary_stream_rpc_method_handler(
           servicer.GetAllBullets,
           request_deserializer=game__pb2.Nothing.FromString,
           response_serializer=game__pb2.Bullets.SerializeToString,
+      ),
+      'GetAllPlayers': grpc.unary_stream_rpc_method_handler(
+          servicer.GetAllPlayers,
+          request_deserializer=game__pb2.Nothing.FromString,
+          response_serializer=game__pb2.OtherPlayerInformation.SerializeToString,
+      ),
+      'GetPlayersHealthsChanging': grpc.unary_stream_rpc_method_handler(
+          servicer.GetPlayersHealthsChanging,
+          request_deserializer=game__pb2.Id.FromString,
+          response_serializer=game__pb2.HealthsChanging.SerializeToString,
+      ),
+      'GetPlayerName': grpc.unary_unary_rpc_method_handler(
+          servicer.GetPlayerName,
+          request_deserializer=game__pb2.Id.FromString,
+          response_serializer=game__pb2.Name.SerializeToString,
       ),
       'Move': grpc.unary_unary_rpc_method_handler(
           servicer.Move,

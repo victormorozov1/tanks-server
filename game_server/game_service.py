@@ -22,6 +22,13 @@ class GameService(game_grpc.GameServicer):
         for id in self.field.players.keys():
             self.field.make_step(id)
 
+        delete_tanks = []
+        for i in self.field.players.keys():
+            if self.field.players[i].tank.healths <= 0:
+                delete_tanks.append(i)
+        for i in delete_tanks:
+            del self.field.players[i]
+
         deleted_bullets_id = []
         for id, bullet in self.field.bullets.items():
             if bullet.deleted:
@@ -121,8 +128,13 @@ class GameService(game_grpc.GameServicer):
         player_id = request.s
         self.field.players_healths_changing_information[player_id] = []
         while context.is_active():
-            arr = self.field.players_healths_changing_information[player_id]
-            self.field.player_turns_information[player_id] = []
-            for i in arr:
-                yield i
+            print('ca')
+            try:
+                arr = self.field.players_healths_changing_information[player_id]
+                for i in arr:
+                    print('returning to ', player_id)
+                    yield i
+                self.field.players_healths_changing_information[player_id] = []
+            except BaseException as e:
+                print('!!!!!!!!!!', e)
             sleep(self.sleep)
