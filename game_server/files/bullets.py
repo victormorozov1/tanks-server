@@ -27,7 +27,7 @@ class Bullet:  # В классе храняться координаты ЦЕН�
                         game_proto.HealthsChanging(id=tank.id[:2:], change=tank.healths))
                 self.deleted = True
 
-        if not self.field.map.is_free(self.x, self.y):
+        if not self.field.map.is_free_for_bullet(self.x, self.y):
             self.deleted = True
             # Тут ещё нужно будет понижать здоровье стены
 

@@ -67,7 +67,14 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetMap(self, request, context):
-        return game_proto.Map(s=str(self.field.map))
+        try:
+            return game_proto.Map(s=str(self.field.map))
+        except BaseException as e:
+            print(e)
+            try:
+                print(self.field.map)
+            except BaseException as e:
+                print(e)
 
     def Move(self, request, context):
         player = self.field.players[request.s]

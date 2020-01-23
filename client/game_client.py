@@ -27,9 +27,7 @@ class GameClient:
         s = self._game_service.GetMap(game_proto.Nothing()).s
         ret = []
         for i in s.split(SEPARATORS[0]):
-            ret.append([])
-            for j in i.split(SEPARATORS[1]):
-                ret[-1].append(int(j))
+            ret.append(i)
         return ret
 
     def move(self):

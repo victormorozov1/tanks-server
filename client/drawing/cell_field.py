@@ -23,7 +23,7 @@ class CellField(Field):
             for j in range(max(0, start[0] // CELL_SZ), min(len(self.field_arr[i]), start[0] // CELL_SZ + win_sz[0] // CELL_SZ + 2)):
                 x, y = j, i
                 for pos in camera_coords(x * self.cell_sz, y * self.cell_sz, self.szx, self.szy, start):
-                    if self.field_arr[i][j] != 0:
+                    if self.field_arr[i][j] != '.':
                         win.blit(self.field_dict[self.field_arr[i][j]], pos)
 
     def draw_objects(self, win, start=(0, 0)):
@@ -35,8 +35,8 @@ class CellField(Field):
 
     def show(self, win, win_sz, start=(0, 0)):
         win.fill(self.bg)
-        self.draw_field(win, win_sz, start=start)
         self.draw_objects(win, start=start)
         for i in self.bullets:
             win.blit(bullet_pict, (i[0] - start[0], i[1] - start[1]))
+        self.draw_field(win, win_sz, start=start)
         pygame.display.update()

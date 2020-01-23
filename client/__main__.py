@@ -60,10 +60,10 @@ class Tank:
         self.id = id[:2:]
         self.direction = direction
         self.healths = healths
-        self.pictures = {'down': picture,
-                         'up': pygame.transform.rotate(picture, 180),
-                         'left': pygame.transform.rotate(picture, -90),
-                         'right': pygame.transform.rotate(picture, 90)}
+        self.pictures = {'up': picture,
+                         'down': pygame.transform.rotate(picture, 180),
+                         'right': pygame.transform.rotate(picture, -90),
+                         'left': pygame.transform.rotate(picture, 90)}
         my_game.field.add_object(id, self)
         self.name = gk.get_player_name(id)
         self.turn(self.direction)
@@ -97,6 +97,7 @@ class Tank:
         self.turn('right')
 
     def turn(self, direction):
+        print(self.direction)
         self.picture = self.pictures[direction]
 
 
@@ -151,7 +152,9 @@ def start_game(win):
     field_arr = gk.get_map()
 
     field_dict = dict()
-    field_dict[10] = load_picture('box.png')
+    field_dict['#'] = box_pict
+    field_dict['@'] = bush_pict
+    field_dict['*'] = river_pict
 
     my_game = MyGame(SZX, SZY, win, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
                      field='cell field',
