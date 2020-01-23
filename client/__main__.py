@@ -69,7 +69,9 @@ class Tank:
         self.x, self.y = new_x, new_y
 
     def draw(self, win, start=(0, 0)):
-        win.blit(self.picture, (self.x - start[0], self.y - start[1]))
+        win.blit(self.picture, (self.x - start[0], self.y - start[1]))  # Отрисовка танка
+        pygame.draw.rect(win, (255 - self.healths * 2, self.healths * 2, 0),  # Отрисовка линии здоровья
+                         (self.x - start[0], self.y - 15 - start[1], int(CELL_SZ * self.healths / 100), 5))
 
     def turn_up(self):
         self.turn('up')
@@ -137,7 +139,7 @@ if __name__ == '__main__':
 
     pygame.init()
     display_size = pygame.display.Info()
-    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=CELL_SZ, bg=(122, 233, 111),
+    my_game = MyGame(display_size.current_w, display_size.current_h, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
                      field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
