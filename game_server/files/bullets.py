@@ -26,13 +26,9 @@ class Bullet:  # В классе храняться координаты ЦЕН�
                         game_proto.HealthsChanging(id=i[:2:], change=-self.damage))
                 self.deleted = True
 
-        arr_x = [self.x - self.radius, self.x + self.radius]
-        arr_y = [self.y - self.radius, self.x + self.radius]
-        for x in arr_x:
-            for y in arr_y:
-                if not self.field.map.is_free(x, y):
-                    self.deleted = True
-                    # Тут ещё нужно будет понижать здоровье стены
+        if not self.field.map.is_free(self.x, self.y):
+            self.deleted = True
+            # Тут ещё нужно будет понижать здоровье стены
 
     def move(self):
         if self.moving_direction == 'up':
