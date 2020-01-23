@@ -10,7 +10,7 @@ def diff_to_min(a, b, c):
 def object_to_point_diff(obj, point_pos):
     dx = diff_to_min(obj.x, obj.x + obj.szx, point_pos[0])
     dy = diff_to_min(obj.y, obj.x + obj.szy, point_pos[1])
-    return sqrt(dx ** 2 + dy ** 2)
+    return min(dx, dy)
 
 
 # Функция расстояния между двумя точками

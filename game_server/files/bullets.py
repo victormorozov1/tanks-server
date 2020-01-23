@@ -19,7 +19,7 @@ class Bullet:  # В классе храняться координаты ЦЕН�
     def check_for_hit_on_target(self):
         for player in self.field.players.values():
             tank = player.tank
-            if object_to_point_diff(tank, (self.x, self.y)) < self.radius:
+            if diff(tank.x + TANK_SZ // 2, tank.y + TANK_SZ // 2, self.x, self.y) < self.radius + TANK_SZ // 2:
                 tank.healths -= self.damage
                 for i in self.field.players_healths_changing_information.keys():
                     self.field.players_healths_changing_information[i].append(

@@ -1,11 +1,5 @@
-import pygame, os
 from client.game_client import *
 from time import sleep
-from client.pygame_field.game import Game
-import pygame
-from random import randrange as rd
-from client.pygame_field.functions import *
-from client.constants import *
 from random import randrange as rd, choice
 
 
