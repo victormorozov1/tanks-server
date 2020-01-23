@@ -35,6 +35,8 @@ def get_name(win, max_len, pos):
                         done = True
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
+                    elif event.key == pygame.QUIT:
+                        return False
                     else:
                         text += event.unicode
 

@@ -33,13 +33,22 @@ class GameClient:
         return ret
 
     def move(self):
-        self._game_service.Move(game_proto.Id(s=self.id))
+        try:
+            self._game_service.Move(game_proto.Id(s=self.id))
+        except BaseException as e:
+            print(e)
 
     def turn(self, direction):
-        self._game_service.Turn(game_proto.TurnMessage(id=self.id, direction=direction))
+        try:
+            self._game_service.Turn(game_proto.TurnMessage(id=self.id, direction=direction))
+        except BaseException as e:
+            print(e)
 
     def fire(self):
-        self._game_service.Fire(game_proto.Id(s=self.id))
+        try:
+            self._game_service.Fire(game_proto.Id(s=self.id))
+        except BaseException as e:
+            print(e)
 
     def start_listening_for_messages(self, on_message_received, it):
         threading.Thread(target=self._listen_for_messages, daemon=True, args=(on_message_received, it)).start()
@@ -74,10 +83,13 @@ class GameClient:
         return ret
 
     def get_player_name(self, id):
-        print('in get player name')
-        ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
-        print('ret rec')
-        return ret.s
+        try:
+            print('in get player name')
+            ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
+            print('ret rec')
+            return ret.s
+        except BaseException as e:
+            print(e)
 
 
 

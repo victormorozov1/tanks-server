@@ -21,10 +21,12 @@ class Game:
         self.sleep = sleep
         self.szx = szx
         self.szy = szy
+        self.exit = False
 
     def handle_event_exit(self, ev):
         if ev.type == pygame.QUIT:
-            self.running = False
+            self.exit = True
+            print('EXIT TRUE')
 
     def handle_event(self, ev):
         pass
@@ -48,9 +50,10 @@ class Game:
 
     def run(self):
         self.running = True
-        while self.running:
+        while self.running and not self.exit:
             self.handle_events()
             self.handle_all_pressed()
             self.game_iteration()
 
             sleep(self.sleep)
+        return self.exit

@@ -17,7 +17,11 @@ def delete_tank(id):
 def player_healths_change_received(message):
     tanks[message.id].healths = message.change
     if message.change <= 0:
-        delete_tank(message.id)
+        if message.id == tank.id:
+            my_game.running = False
+            print('end running')
+        else:
+            delete_tank(message.id)
 
 
 def player_movement_received(message):
@@ -128,19 +132,19 @@ class MyGame(Game):
         self.field.show(win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
 
 
-if __name__ == '__main__':
-    global mar_id, tanks_sprite_group, my_game, gk
+def start_game(win):
+    global mar_id, tanks_sprite_group, my_game, gk, tanks, tank
 
     tanks = dict()
     bullets = []
 
-    pygame.init()
-    win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
     win.blit(choice(savers), (0, 0))
 
-
     gk = GameClient()
-    x, y, direction = gk.connect(name=get_name(win, 5, (SZX // 2 - 30, SZY // 2)))
+    name = get_name(win, 5, (SZX // 2 - 30, SZY // 2))
+    if not name:
+        return True
+    x, y, direction = gk.connect(name=name)
     while not gk.connected:  # Вроде этот while можно убрать
         sleep(0.1)
 
@@ -167,5 +171,12 @@ if __name__ == '__main__':
 
     tanks[tank.id] = tank
 
-    my_game.run()
+    return my_game.run()
+
+
+if __name__ == '__main__':
+    pygame.init()
+    win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
+    while not start_game(win):
+        pass
 

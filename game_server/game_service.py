@@ -35,14 +35,12 @@ class GameService(game_grpc.GameServicer):
         for id, bullet in self.field.bullets.items():
             if bullet.deleted:
                 deleted_bullets_id.append(id)
-                print('not del')
             else:
                 bullet.move()
         for i in deleted_bullets_id:
             del self.field.bullets[i]
 
     def Connect(self, request, context):
-        print(f'player {request.name} connected')
         x, y = self.field.free_cell()
 
         player_id, player_name = request.id, request.name
@@ -98,13 +96,11 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetAllPlayers(self, request, context):
-        print('in get all players')
         for i in self.field.players.values():
             try:
                 yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y, healths=i.tank.healths)
             except BaseException as e:
                 print(e)
-        print('end')
 
     def GetPlayersTurns(self, request, context):
         player_id = request.s
@@ -117,10 +113,7 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetPlayerName(self, request, context):
-        print('in get name')
         id = request.s
-        print('id =', id)
-        print(self.names.keys())
         try:
             return game_proto.Name(s=self.names[request.s])
         except BaseException as e:
