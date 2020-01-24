@@ -15,47 +15,34 @@ class GameService(game_grpc.GameServicer):
     def __init__(self):
         self.n = N
         self.m = N
-        self.sleep = 0.05
+        self.sleep = 0.01
         self.field = Field()
         self.names = dict()
 
     def game_iteration(self):
         try:
-            for id in self.field.players.keys():
-                self.field.make_step(id)
+            deleted_objects_id = []
+            arr = self.field.objects.values()
+            for obj in arr:
+                obj.move()
+                if obj.healths <= 0:
+                    deleted_objects_id.append(obj)
 
-            delete_tanks = []
-            for i in self.field.players.keys():
-                if self.field.players[i].tank.healths <= 0:
-                    delete_tanks.append(i)
-            for i in delete_tanks:
-                del self.field.players[i]
-
-            deleted_bullets_id = []
-
-            for id, bullet in self.field.bullets.items():
-                if bullet.deleted:
-                    deleted_bullets_id.append(id)
-                else:
-                    bullet.move()
-            for i in deleted_bullets_id:
-                del self.field.bullets[i]
+            for i in deleted_objects_id:
+                del self.field.objects[i]
         except BaseException as e:
-            pass
+            print('Error in game_iteration', e)
 
     def Connect(self, request, context):
         x, y = self.field.free_cell()
 
-        player_id, player_name = request.id, request.name
+        password, player_name = request.id, request.name
+        id = password[:2:]
 
-        client_win_size = request.szx, request.szy
+        self.field.add_object(Tank(x, y, 100, 10, self.field, id, player_name))
 
-        self.field.players[player_id] = Player(Tank(x, y, 100, 9, self.field, player_id[:2:]), client_win_size,
-                                               player_id, player_name)
-        self.names[player_id] = player_name
-        self.names[player_id[:2:]] = player_name
-
-        self.field.players[player_id].is_moving = True  # Заставляем игрока двинуться 1 раз чтобы его увидели другие
+        self.field.objects[id].is_moving = True  # Заставляем игрока двинуться 1 раз чтобы его увидели другие,
+        #                                                 мне просто день делать под это отдельную функцию)
 
         return game_proto.Position(x=x, y=y, direction='up')
 
@@ -68,7 +55,6 @@ class GameService(game_grpc.GameServicer):
             for i in arr:
                 yield i
             sleep(self.sleep)
-        print('someone unconnected')
 
     def GetMap(self, request, context):
         try:
@@ -77,37 +63,45 @@ class GameService(game_grpc.GameServicer):
             pass
 
     def Move(self, request, context):
-        player = self.field.players[request.s]
-        player.is_moving = True
+        password, id = request.s, request.s[:2:]
+        player = self.field.objects[id]
+        if password == player.password:
+            player.is_moving = True
         return game_proto.Nothing()
 
     def Turn(self, request, context):
-        self.field.players[request.id].tank.moving_direction = request.direction
+        password, id, direction = request.id, request.id[:2:], request.direction
+        player = self.field.objects[id]
+        if password == player.password:
+            player.direction = direction
 
-        for i in self.field.player_turns_information.keys():
-            self.field.player_turns_information[i].append(game_proto.PlayerTurn(id=request.id[:2:], direction=request.direction))
+            for i in self.field.player_turns_information.keys():
+                self.field.player_turns_information[i].append(game_proto.PlayerTurn(id=id, direction=direction))
 
         return game_proto.Nothing()
 
     def Fire(self, request, context):
-        player_id = request.s
-        try:
-            self.field.players[player_id].tank.fire()
-        except BaseException as e:
-            pass
+        password, id = request.s, request.s[:2:]
+        player = self.field.objects[id]
+        if password == player.password:
+            player.fire()
+
         return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
         while context.is_active():
-            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in self.field.bullets.values()]))
+            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in filter(lambda x: i.object_type == 'bullet', self.field.objects())]))
             sleep(self.sleep)
 
     def GetAllPlayers(self, request, context):
-        for i in self.field.players.values():
-            try:
-                yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y, healths=i.tank.healths)
-            except BaseException as e:
-                pass
+        print('in get all players')
+        for i in self.field.objects.values():
+            if i.object_type == 'tank':
+                print('ret')
+                try:
+                    yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.x, y=i.y, healths=i.healths)
+                except BaseException as e:
+                    print(e)
 
     def GetPlayersTurns(self, request, context):
         player_id = request.s
@@ -120,11 +114,8 @@ class GameService(game_grpc.GameServicer):
             sleep(self.sleep)
 
     def GetPlayerName(self, request, context):
-        id = request.s
-        try:
-            return game_proto.Name(s=self.names[request.s])
-        except BaseException as e:
-            pass
+        id = request.s[:2:]
+        return game_proto.Name(s=self.field.objects[id].name)
 
     def GetPlayersHealthsChanging(self, request, context):
         player_id = request.s

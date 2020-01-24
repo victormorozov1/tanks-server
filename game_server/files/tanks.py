@@ -3,38 +3,61 @@ from game_server.files.bullets import *
 
 
 class Tank:
-    def __init__(self, x, y, healths, speed, field, id, moving_direction='up', szx=TANK_SZ, szy=TANK_SZ):
+    def __init__(self, x, y, healths, speed, field, id, name, direction='up', szx=TANK_SZ, szy=TANK_SZ):
         self.x, self.y = x, y
         self.healths = healths
         # self.burrels = burrels
         # barrels - информация о всех дулах танка.
         self.speed = speed
-        self.moving_direction = moving_direction
+        self.direction = direction
         self.field = field
-        self.id = id
+        self.id = id[:2:]
         self.num_fired_bullets = 0
         self.szx, self.szy = szx, szy
+        self.field.add_object(self)
+        self.object_type = 'tank'
+        self.is_moving = False
+        self.name = name
+        self.password = id
 
-    def move(self, move_x, move_y):
-        self.x += move_x
-        self.y += move_y
+    def move_on_one_pixel(self):
+        global new_x, new_y
+        new_x, new_y = self.x, self.y
+        if self.direction == 'up':
+            new_y = self.y - 1
+        elif self.direction == 'down':
+            new_y = self.y + 1
+        elif self.direction == 'left':
+            new_x = self.x - 1
+        elif self.direction == 'right':
+            new_x = self.x + 1
+        if self.field.free(new_x, new_y, CELL_SZ, ignore=[self]):
+            self.x, self.y = new_x, new_y
+
+    def move(self):
+        if self.is_moving:
+            for i in range(self.speed):
+                self.move_on_one_pixel()
 
     def fire(self):
         self.num_fired_bullets += 1
         global x, y
-        if self.moving_direction == 'left':
+        if self.direction == 'left':
             x = self.x - BULLET_INDENT
-        elif self.moving_direction == 'up' or self.moving_direction == 'down':
+        elif self.direction == 'up' or self.direction == 'down':
             x = self.x + TANK_SZ // 2
         else:
             x = self.x + TANK_SZ + BULLET_INDENT
 
-        if self.moving_direction == 'up':
+        if self.direction == 'up':
             y = self.y - BULLET_INDENT
-        elif self.moving_direction == 'left' or self.moving_direction == 'right':
+        elif self.direction == 'left' or self.direction == 'right':
             y = self.y + TANK_SZ // 2
         else:
             y = self.y + TANK_SZ + BULLET_INDENT
 
         self.field.bullets[self.id + str(self.num_fired_bullets)] = (
-            Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.moving_direction, BULLET_DAMAGE, self.field))
+            Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.direction, BULLET_DAMAGE, self.field))
+
+    def __str__(self):
+        return str(self.id) + SEPARATORS[0] + str(self.x) + SEPARATORS[0] + str(self.y)
