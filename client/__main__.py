@@ -53,7 +53,7 @@ def bullets_received(message):
 
 
 class Tank:
-    def __init__(self, id, picture=tank_pict, direction='up', x=-100, y=-100, healths=100):
+    def __init__(self, id, picture, direction='up', x=-100, y=-100, healths=100):
         self.x = x
         self.y = y
         self.id = id[:2:]
@@ -110,7 +110,7 @@ class MyGame(Game):
     def move_tank(self, id, new_x, new_y):
         tank = my_game.field.get_object_by_id(id)
         if not tank:
-            self.field.add_object(id, tank_pict, new_x, new_y)
+            self.field.add_object(id, choice(tank_pictures), new_x, new_y)
         else:
             self.field.move_object_to(id, new_x, new_y)
 
@@ -158,14 +158,14 @@ def start_game(win):
                      field_arr=field_arr,
                      field_dict=field_dict)
 
-    tank = Tank(gk.id, x=x, y=y, direction=direction)
+    tank = Tank(gk.id, choice(tank_pictures), x=x, y=y, direction=direction)
     tanks[tank.id] = tank
 
     print('my id =', gk.id)
 
     for i in gk.get_all_players():
         if i[0] != tank.id:
-            tanks[i[0]] = Tank(i[0], x=i[1], y=i[2], healths=i[3])
+            tanks[i[0]] = Tank(i[0], choice(tank_pictures), x=i[1], y=i[2], healths=i[3])
         print(tanks[i[0]])
 
     gk.start_listening_for_players_movements(player_movement_received)
