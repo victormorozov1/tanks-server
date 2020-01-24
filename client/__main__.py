@@ -171,7 +171,7 @@ def start_game(win):
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)
     gk.start_listening_for_bullets_positions(bullets_received)
-    #gk.start_listening_for_healths_changing(player_healths_change_received)
+    gk.start_listening_for_healths_changing(player_healths_change_received)
 
     tanks[tank.id] = tank
 

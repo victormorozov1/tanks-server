@@ -61,8 +61,7 @@ class Tank:
         else:
             y = self.y + TANK_SZ + BULLET_INDENT
 
-        self.field.bullets[self.id + str(self.num_fired_bullets)] = (
-            Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.direction, BULLET_DAMAGE, self.field))
+        self.field.add_object(Bullet(x, y, BULLET_RADIUS, BULLET_SPEED, self.direction, BULLET_DAMAGE, self.field, self.id + str(self.num_fired_bullets)))
 
     def __str__(self):
         return str(self.id) + SEPARATORS[0] + str(self.x) + SEPARATORS[0] + str(self.y)

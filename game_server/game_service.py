@@ -26,7 +26,7 @@ class GameService(game_grpc.GameServicer):
             for obj in arr:
                 obj.move()
                 if obj.healths <= 0:
-                    deleted_objects_id.append(obj)
+                    deleted_objects_id.append(obj.id)
 
             for i in deleted_objects_id:
                 del self.field.objects[i]
@@ -81,11 +81,14 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
 
     def Fire(self, request, context):
-        password, id = request.s, request.s[:2:]
-        player = self.field.objects[id]
-        if password == player.password:
-            player.fire()
-
+        print('Fire')
+        try:
+            password, id = request.s, request.s[:2:]
+            player = self.field.objects[id]
+            if password == player.password:
+                player.fire()
+        except BaseException as e:
+            print('Error in Fire', e)
         return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
