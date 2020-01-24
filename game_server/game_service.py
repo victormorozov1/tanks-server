@@ -15,7 +15,7 @@ class GameService(game_grpc.GameServicer):
     def __init__(self):
         self.n = N
         self.m = N
-        self.sleep = 0.01
+        self.sleep = 0.05
         self.field = Field()
         self.names = dict()
 
@@ -41,7 +41,7 @@ class GameService(game_grpc.GameServicer):
             for i in deleted_bullets_id:
                 del self.field.bullets[i]
         except BaseException as e:
-            print(e)
+            pass
 
     def Connect(self, request, context):
         x, y = self.field.free_cell()
@@ -68,16 +68,13 @@ class GameService(game_grpc.GameServicer):
             for i in arr:
                 yield i
             sleep(self.sleep)
+        print('someone unconnected')
 
     def GetMap(self, request, context):
         try:
             return game_proto.Map(s=str(self.field.map))
         except BaseException as e:
-            print(e)
-            try:
-                print(self.field.map)
-            except BaseException as e:
-                print(e)
+            pass
 
     def Move(self, request, context):
         player = self.field.players[request.s]
@@ -97,7 +94,7 @@ class GameService(game_grpc.GameServicer):
         try:
             self.field.players[player_id].tank.fire()
         except BaseException as e:
-            print(e)
+            pass
         return game_proto.Nothing()
 
     def GetAllBullets(self, request, context):
@@ -110,7 +107,7 @@ class GameService(game_grpc.GameServicer):
             try:
                 yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.tank.x, y=i.tank.y, healths=i.tank.healths)
             except BaseException as e:
-                print(e)
+                pass
 
     def GetPlayersTurns(self, request, context):
         player_id = request.s
@@ -127,7 +124,7 @@ class GameService(game_grpc.GameServicer):
         try:
             return game_proto.Name(s=self.names[request.s])
         except BaseException as e:
-            print('1', e)
+            pass
 
     def GetPlayersHealthsChanging(self, request, context):
         player_id = request.s
@@ -139,5 +136,5 @@ class GameService(game_grpc.GameServicer):
                     yield i
                 self.field.players_healths_changing_information[player_id] = []
             except BaseException as e:
-                print('!!!!!!!!!!', e)
+                pass
             sleep(self.sleep)

@@ -29,8 +29,8 @@ def player_movement_received(message):
     if id in tanks.keys():
         tanks[id].move_to(new_x, new_y)
     else:
-        field_object = my_game.field.add_object(id, tank_pict, new_x, new_y)
-        tanks[id] = Tank(id, field_object, x=new_x, y=new_y)
+        tanks[id] = Tank(id, x=new_x, y=new_y)
+        my_game.field.add_object(id, tank)
 
 
 def player_turn_received(message):
@@ -142,7 +142,8 @@ def start_game(win):
     win.blit(choice(savers), (0, 0))
 
     gk = GameClient()
-    name = get_name(win, 5, (SZX // 2 - 30, SZY // 2))
+    #name = get_name(win, 5, (SZX // 2 - 30, SZY // 2))
+    name = 'guest'
     if not name:
         return True
     x, y, direction = gk.connect(name=name)
@@ -179,7 +180,7 @@ def start_game(win):
 
 if __name__ == '__main__':
     pygame.init()
-    win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
+    win = pygame.display.set_mode((1, 1), pygame.RESIZABLE)
     while not start_game(win):
         pass
 

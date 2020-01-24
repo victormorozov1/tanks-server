@@ -33,26 +33,26 @@ class Bullet:  # В классе храняться координаты ЦЕН�
 
     def move(self):
         if self.moving_direction == 'up':
-            for i in range(self.speed):
-                self.y -= 1  # если будет тормозить нужно упростить этот кусок кода!!!
+            for i in range(self.speed // (CELL_SZ // 2)):
+                self.y -= CELL_SZ // 2  # если будет тормозить нужно упростить этот кусок кода!!!
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
         elif self.moving_direction == 'down':
             for i in range(self.speed):
-                self.y += 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.y += CELL_SZ // 2  # если будет тормозить нужно упростить этот кусок кода!!!
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
         elif self.moving_direction == 'left':
             for i in range(self.speed):
-                self.x -= 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.x -= CELL_SZ // 2  # если будет тормозить нужно упростить этот кусок кода!!!
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
         elif self.moving_direction == 'right':
             for i in range(self.speed):
-                self.x += 1  # если будет тормозить нужно упростить этот кусок кода!!!
+                self.x += CELL_SZ // 2  # если будет тормозить нужно упростить этот кусок кода!!!
                 self.check_for_hit_on_target()
                 if self.deleted:
                     break
