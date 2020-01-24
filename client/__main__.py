@@ -180,7 +180,7 @@ def start_game(win):
 
 if __name__ == '__main__':
     pygame.init()
-    win = pygame.display.set_mode((1, 1), pygame.RESIZABLE)
+    win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
     while not start_game(win):
         pass
 
