@@ -28,7 +28,7 @@ def player_movement_received(message):
     if id in tanks.keys():
         tanks[id].move_to(new_x, new_y)
     else:
-        tanks[id] = Tank(id, x=new_x, y=new_y)
+        tanks[id] = Tank(id, choice(tank_pictures), x=new_x, y=new_y)
         my_game.field.add_object(id, tanks[id])
 
 

@@ -23,7 +23,7 @@ class Map:
 
     def load_level(self):
         self.map = []
-        f = open('game_server/files/levels/2.txt', 'r')
+        f = open('game_server/files/levels/1.txt', 'r')
         for line in f:
             self.map.append(line.strip('\n'))
         f.close()
