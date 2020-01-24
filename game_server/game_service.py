@@ -39,7 +39,7 @@ class GameService(game_grpc.GameServicer):
         password, player_name = request.id, request.name
         id = password[:2:]
 
-        self.field.add_object(Tank(x, y, 100, 10, self.field, id, player_name))
+        self.field.add_object(Tank(x, y, 100, 10, self.field, password, player_name))
 
         self.field.objects[id].is_moving = True  # Заставляем игрока двинуться 1 раз чтобы его увидели другие,
         #                                                 мне просто день делать под это отдельную функцию)
@@ -47,14 +47,19 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Position(x=x, y=y, direction='up')
 
     def GetPlayersMovements(self, request, context):
+        print('in get players movements')
         player_id = request.s
         self.field.player_movements_information[player_id] = []
         while context.is_active():
             arr = self.field.player_movements_information[player_id]
+            if len(arr):
+                print('arr = ', arr)
             self.field.player_movements_information[player_id] = []
             for i in arr:
+                print('returning')
                 yield i
             sleep(self.sleep)
+        print('unconnected')
 
     def GetMap(self, request, context):
         try:
@@ -67,6 +72,7 @@ class GameService(game_grpc.GameServicer):
         player = self.field.objects[id]
         if password == player.password:
             player.is_moving = True
+            print('moving')
         return game_proto.Nothing()
 
     def Turn(self, request, context):
@@ -90,14 +96,12 @@ class GameService(game_grpc.GameServicer):
 
     def GetAllBullets(self, request, context):
         while context.is_active():
-            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in filter(lambda x: i.object_type == 'bullet', self.field.objects())]))
+            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in filter(lambda x: x.object_type == 'bullet', self.field.objects.values())]))
             sleep(self.sleep)
 
     def GetAllPlayers(self, request, context):
-        print('in get all players')
         for i in self.field.objects.values():
             if i.object_type == 'tank':
-                print('ret')
                 try:
                     yield game_proto.OtherPlayerInformation(id=i.id[:2:], x=i.x, y=i.y, healths=i.healths)
                 except BaseException as e:

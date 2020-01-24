@@ -1,5 +1,6 @@
 from game_server.files.constants import *
 from game_server.files.bullets import *
+from game_server.grpc_out import game_pb2 as game_proto
 
 
 class Tank:
@@ -36,8 +37,14 @@ class Tank:
 
     def move(self):
         if self.is_moving:
+            print('moving')
             for i in range(self.speed):
                 self.move_on_one_pixel()
+                print(self.x, self.y)
+            self.is_moving = False
+            for i in self.field.player_movements_information.keys():
+                self.field.player_movements_information[i].append(
+                    game_proto.PlayerMovement(id=self.id, new_x=self.x, new_y=self.y))
 
     def fire(self):
         self.num_fired_bullets += 1

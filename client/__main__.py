@@ -25,7 +25,6 @@ def player_healths_change_received(message):
 
 
 def player_movement_received(message):
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     id, new_x, new_y = message.id, message.new_x, message.new_y
     if id in tanks.keys():
         tanks[id].move_to(new_x, new_y)
@@ -170,15 +169,13 @@ def start_game(win):
             tanks[i[0]] = Tank(i[0], x=i[1], y=i[2], healths=i[3])
 
     gk.start_listening_for_players_movements(player_movement_received)
-    #gk.start_listening_for_players_turns(player_turn_received)
-    #gk.start_listening_for_bullets_positions(bullets_received)
+    gk.start_listening_for_players_turns(player_turn_received)
+    gk.start_listening_for_bullets_positions(bullets_received)
     #gk.start_listening_for_healths_changing(player_healths_change_received)
 
     tanks[tank.id] = tank
 
     return my_game.run()
-
-
 
 
 if __name__ == '__main__':
