@@ -67,6 +67,9 @@ class Tank:
         my_game.field.add_object(id, self)
         self.name = gk.get_player_name(id)
 
+        self.font =  pygame.font.Font(None, 18)
+        self.text = self.font.render(self.name, 1, (255, 255, 255))
+
     def move_on(self, move_x, move_y):
         self.x += move_x
         self.y += move_y
@@ -79,9 +82,9 @@ class Tank:
         pygame.draw.rect(win, (255 - self.healths * 2, self.healths * 2, 0),  # Отрисовка линии здоровья
                          (self.x - start[0], self.y - 17 - start[1], int(CELL_SZ * self.healths / 100), 5))
 
-        f1 = pygame.font.Font(None, 18)
-        text = f1.render(self.name, 1, (255, 255, 255))
-        win.blit(text, (self.x - start[0], self.y - 12 - start[1]))
+        win.blit(self.text, (self.x - start[0], self.y - 12 - start[1]))
+
+
 
     def turn_up(self):
         self.turn('up')
@@ -100,6 +103,7 @@ class Tank:
 
     def __str__(self):
         return f'Tank(id={self.id}, x={self.x}, y={self.y}, direction={self.direction}'
+
 
 class MyGame(Game):
     def __init__(self, *args, **kwargs):
@@ -171,7 +175,7 @@ def start_game(win):
     gk.start_listening_for_bullets_positions(bullets_received)
     gk.start_listening_for_healths_changing(player_healths_change_received)
 
-
+    tank.draw(win, start=(tank.x - my_game.field.szx // 2, tank.y - my_game.field.szy // 2))
 
     return my_game.run()
 
