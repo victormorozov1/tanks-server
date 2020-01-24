@@ -17,19 +17,53 @@ class GameService(game_grpc.GameServicer):
         self.m = N
         self.sleep = 0.01
         self.field = Field()
-        self.names = dict()
+        self.points = dict()
+
+    def kill(self, killer_id, victim_id):
+        try:
+            print(f'{killer_id} killed {victim_id}')
+            if killer_id in self.points.keys():
+                self.points[killer_id] += 10
+            else:
+                self.points[killer_id] = 10
+            elem = game_proto.KillInformation(killer_id=killer_id, victim_name=self.field.objects[victim_id].name,
+                                              killer_points=self.points[killer_id])
+            for i in self.field.kill_information.keys():
+                self.field.kill_information[i].append(elem)
+        except BaseException as e:
+            print('Error in kill', e)
+
+    def GetKills(self, request, context):
+        print('in gtk')
+        id = request.s
+        self.field.kill_information[id] = []
+        while context.is_active():
+            arr = self.field.kill_information[id]
+            self.field.kill_information[id] = []
+            for i in arr:
+                print('returning')
+                yield i
+            sleep(self.sleep)
 
     def game_iteration(self):
         try:
-            deleted_objects_id = []
-            arr = self.field.objects.values()
-            for obj in arr:
-                obj.move()
-                if obj.healths <= 0:
-                    deleted_objects_id.append(obj.id)
-
-            for i in deleted_objects_id:
-                del self.field.objects[i]
+            try:
+                deleted_objects_id = []
+                arr = self.field.objects.values()
+                for obj in arr:
+                    obj.move()
+                    if obj.healths <= 0:
+                        deleted_objects_id.append(obj.id)
+            except BaseException as e:
+                print('!!!!!!!!!!!!!!!!!!', e)
+            try:
+                for i in deleted_objects_id:
+                    obj = self.field.objects[i]
+                    if obj.object_type == 'tank':
+                        self.kill(obj.killer_id, i)
+                    del self.field.objects[i]
+            except BaseException as e:
+                print('!!!!!!!', e)
         except BaseException as e:
             print('Error in game_iteration', e)
 
@@ -81,7 +115,6 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Nothing()
 
     def Fire(self, request, context):
-        print('Fire')
         try:
             password, id = request.s, request.s[:2:]
             player = self.field.objects[id]
@@ -93,7 +126,8 @@ class GameService(game_grpc.GameServicer):
 
     def GetAllBullets(self, request, context):
         while context.is_active():
-            yield game_proto.Bullets(s=SEPARATORS[1].join([str(i) for i in filter(lambda x: x.object_type == 'bullet', self.field.objects.values())]))
+            yield game_proto.Bullets(s=SEPARATORS[1].join(
+                [str(i) for i in filter(lambda x: x.object_type == 'bullet', self.field.objects.values())]))
             sleep(self.sleep)
 
     def GetAllPlayers(self, request, context):

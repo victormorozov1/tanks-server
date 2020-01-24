@@ -54,6 +54,11 @@ class GameStub(object):
         request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
         response_deserializer=game__server_dot_grpc__out_dot_game__pb2.Name.FromString,
         )
+    self.GetKills = channel.unary_stream(
+        '/grpc.Game/GetKills',
+        request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
+        response_deserializer=game__server_dot_grpc__out_dot_game__pb2.KillInformation.FromString,
+        )
     self.Move = channel.unary_unary(
         '/grpc.Game/Move',
         request_serializer=game__server_dot_grpc__out_dot_game__pb2.Id.SerializeToString,
@@ -131,6 +136,13 @@ class GameServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetKills(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def Move(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -194,6 +206,11 @@ def add_GameServicer_to_server(servicer, server):
           servicer.GetPlayerName,
           request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Id.FromString,
           response_serializer=game__server_dot_grpc__out_dot_game__pb2.Name.SerializeToString,
+      ),
+      'GetKills': grpc.unary_stream_rpc_method_handler(
+          servicer.GetKills,
+          request_deserializer=game__server_dot_grpc__out_dot_game__pb2.Id.FromString,
+          response_serializer=game__server_dot_grpc__out_dot_game__pb2.KillInformation.SerializeToString,
       ),
       'Move': grpc.unary_unary_rpc_method_handler(
           servicer.Move,

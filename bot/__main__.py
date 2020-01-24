@@ -10,7 +10,7 @@ if __name__ == '__main__':
         sleep(1)
 
     for i in range(len(gk)):
-        x, y, direction = gk[i].connect()
+        x, y, direction = gk[i].connect(name=str(i))
     i = 4
     while True:
         i += 1

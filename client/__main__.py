@@ -40,6 +40,13 @@ def player_turn_received(message):
         print(f'ERROR: received new tank turn with id={id}')
 
 
+def on_kill_received(message):
+    my_game.messages.append(my_game.messages_font.render(f'{tanks[message.killer_id].name} killed {message.victim_name}', 1, (255, 255, 255)))
+    if len(my_game.messages) > my_game.max_messages_size:
+        my_game.messages = my_game.messages[1::]
+    print(len(my_game.messages))
+
+
 def bullets_received(message):
     my_game.field.bullets = []
     rec = 0
@@ -106,6 +113,9 @@ class Tank:
 class MyGame(Game):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.messages = []
+        self.max_messages_size = 3
+        self.messages_font = pygame.font.Font(None, 36)
 
     def move_tank(self, id, new_x, new_y):
         tank = my_game.field.get_object_by_id(id)
@@ -133,6 +143,11 @@ class MyGame(Game):
 
     def game_iteration(self):
         self.field.show(win, (self.szx, self.szy), start=(tank.x - self.field.szx // 2, tank.y - self.field.szy // 2))
+        x = 10
+        for i in range(len(self.messages)):
+            y = i * 25
+            win.blit(self.messages[i], (x, y))
+        pygame.display.update()
 
 
 def start_game(win):
@@ -153,7 +168,7 @@ def start_game(win):
     field_dict['@'] = bush_pict
     field_dict['*'] = river_pict
 
-    my_game = MyGame(SZX, SZY, win, sleep=0.001, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
+    my_game = MyGame(SZX, SZY, win, sleep=0.01, cell_field_sz=CELL_SZ, bg=(0, 0, 0),
                      field='cell field',
                      field_arr=field_arr,
                      field_dict=field_dict)
@@ -172,6 +187,7 @@ def start_game(win):
     gk.start_listening_for_players_turns(player_turn_received)
     gk.start_listening_for_bullets_positions(bullets_received)
     gk.start_listening_for_healths_changing(player_healths_change_received)
+    gk.start_listening_for_kills(on_kill_received)
 
     tank.draw(win, start=(tank.x - my_game.field.szx // 2, tank.y - my_game.field.szy // 2))
 

@@ -13,6 +13,7 @@ class Field:
         self.player_movements_information = dict()
         self.player_turns_information = dict()
         self.players_healths_changing_information = dict()
+        self.kill_information = dict()
 
     def free(self, x, y, sz, ignore=[]):
         for id, i in self.objects.items():

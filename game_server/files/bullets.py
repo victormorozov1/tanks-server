@@ -22,6 +22,7 @@ class Bullet:
         for tank in self.field.objects.values():
             id = tank.id
             if diff(tank.x + TANK_SZ // 2, tank.y + TANK_SZ // 2, self.x + self.szx // 2, self.y + self.szy // 2) < self.szx // 2 + TANK_SZ // 2:
+                tank.killer_id = self.id[:2:]
                 tank.healths -= self.damage
                 self.healths = -1
                 for i in self.field.players_healths_changing_information.keys():
@@ -30,7 +31,6 @@ class Bullet:
 
         if not self.field.map.is_free_for_bullet(self.x, self.y):
             self.healths = -1
-            print('bullet healths = -1', self.id)
             # Тут ещё нужно будет понижать здоровье стены
 
     def move(self):

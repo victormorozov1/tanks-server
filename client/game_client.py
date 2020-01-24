@@ -70,6 +70,10 @@ class GameClient:
         self.start_listening_for_messages(on_message_received,
                                           self._game_service.GetPlayersHealthsChanging(game_proto.Id(s=self.id)))
 
+    def start_listening_for_kills(self, on_message_received):
+        self.start_listening_for_messages(on_message_received,
+                                          self._game_service.GetKills(game_proto.Id(s=self.id)))
+
     def get_all_players(self):
         ret = []
         for i in self._game_service.GetAllPlayers(game_proto.Nothing()):

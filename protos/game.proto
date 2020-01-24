@@ -82,6 +82,12 @@ message Name{
     string s = 1;
 }
 
+message KillInformation{
+    string killer_id = 1;
+    string victim_name = 2;
+    int32 killer_points = 3;
+}
+
 service Game {
     rpc Connect (PlayerInformation) returns (Position);
 
@@ -93,6 +99,7 @@ service Game {
     rpc GetAllPlayers (Nothing) returns (stream OtherPlayerInformation);
     rpc GetPlayersHealthsChanging (Id) returns (stream HealthsChanging);
     rpc GetPlayerName(Id) returns (Name);
+    rpc GetKills (Id) returns (stream KillInformation);
 
     rpc Move (Id) returns (Nothing);
     rpc Turn (TurnMessage) returns (Nothing);
