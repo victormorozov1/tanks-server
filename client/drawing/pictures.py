@@ -1,7 +1,7 @@
 from client.drawing.functions import load_picture
 from client.drawing.constants import *
 
-tank_pict = load_picture('main_hero_tank.png', size=(CELL_SZ, CELL_SZ))
+tank_pict = load_picture('tank.png', size=(CELL_SZ, CELL_SZ))
 bullet_pict = load_picture('bullet.png', size=(8, 8))
 bush_pict = load_picture('bush.png', size=(CELL_SZ, CELL_SZ))
 box_pict = load_picture('wall.png', size=(CELL_SZ, CELL_SZ))

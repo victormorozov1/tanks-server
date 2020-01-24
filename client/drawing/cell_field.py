@@ -36,7 +36,7 @@ class CellField(Field):
     def show(self, win, win_sz, start=(0, 0)):
         win.fill(self.bg)
         self.draw_objects(win, start=start)
+        self.draw_field(win, win_sz, start=start)
         for i in self.bullets:
             win.blit(bullet_pict, (i[0] - start[0], i[1] - start[1]))
-        self.draw_field(win, win_sz, start=start)
         pygame.display.update()

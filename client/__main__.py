@@ -67,7 +67,7 @@ class Tank:
         my_game.field.add_object(id, self)
         self.name = gk.get_player_name(id)
 
-        self.font =  pygame.font.Font(None, 18)
+        self.font = pygame.font.Font(None, 18)
         self.text = self.font.render(self.name, 1, (255, 255, 255))
 
     def move_on(self, move_x, move_y):
@@ -83,8 +83,6 @@ class Tank:
                          (self.x - start[0], self.y - 17 - start[1], int(CELL_SZ * self.healths / 100), 5))
 
         win.blit(self.text, (self.x - start[0], self.y - 12 - start[1]))
-
-
 
     def turn_up(self):
         self.turn('up')
