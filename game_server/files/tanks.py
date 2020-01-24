@@ -37,10 +37,8 @@ class Tank:
 
     def move(self):
         if self.is_moving:
-            print('moving')
             for i in range(self.speed):
                 self.move_on_one_pixel()
-                print(self.x, self.y)
             self.is_moving = False
             for i in self.field.player_movements_information.keys():
                 self.field.player_movements_information[i].append(

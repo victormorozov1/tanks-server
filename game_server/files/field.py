@@ -17,9 +17,9 @@ class Field:
     def free(self, x, y, sz, ignore=[]):
         for id, i in self.objects.items():
             if i not in ignore and id not in ignore:
-                if x - i.x < sz and y - i.y < sz and i.x - x < i.szx and i.y - y < i.szy:
-                    continue
-                return False
+                px, py = (x >= i.x and x - i.x <= sz or i.x >= x and i.x - x <= i.szx, y >= i.y and y - i.y <= sz or i.y >= y and i.y - y < i.szy)
+                if px and py:
+                    return False
 
         return self.map.area_is_free((x, y), sz, sz) and x in range(0, FIELD_SZ_X - sz) and y in range(0,
                                                                                                        FIELD_SZ_Y - sz)

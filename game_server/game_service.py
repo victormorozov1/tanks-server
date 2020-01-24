@@ -47,19 +47,14 @@ class GameService(game_grpc.GameServicer):
         return game_proto.Position(x=x, y=y, direction='up')
 
     def GetPlayersMovements(self, request, context):
-        print('in get players movements')
         player_id = request.s
         self.field.player_movements_information[player_id] = []
         while context.is_active():
             arr = self.field.player_movements_information[player_id]
-            if len(arr):
-                print('arr = ', arr)
             self.field.player_movements_information[player_id] = []
             for i in arr:
-                print('returning')
                 yield i
             sleep(self.sleep)
-        print('unconnected')
 
     def GetMap(self, request, context):
         try:
@@ -72,7 +67,6 @@ class GameService(game_grpc.GameServicer):
         player = self.field.objects[id]
         if password == player.password:
             player.is_moving = True
-            print('moving')
         return game_proto.Nothing()
 
     def Turn(self, request, context):

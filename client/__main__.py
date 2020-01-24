@@ -25,6 +25,7 @@ def player_healths_change_received(message):
 
 
 def player_movement_received(message):
+    print('player move rec, id=', message.id, ' coords', message.new_x, message.new_y)
     id, new_x, new_y = message.id, message.new_x, message.new_y
     if id in tanks.keys():
         tanks[id].move_to(new_x, new_y)
@@ -97,7 +98,6 @@ class Tank:
         self.turn('right')
 
     def turn(self, direction):
-        print(self.direction)
         self.picture = self.pictures[direction]
 
 
