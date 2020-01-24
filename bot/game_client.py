@@ -20,7 +20,6 @@ class GameClient:
         self.id = random_string(4)
         position = self._game_service.Connect(game_proto.PlayerInformation(id=self.id, szx=900, szy=900, name=name))
         self.connected = True
-        print('connected')
         return position.x, position.y, position.direction
 
     def get_map(self):
@@ -66,17 +65,12 @@ class GameClient:
 
     def get_all_players(self):
         ret = []
-        print('ok')
         for i in self._game_service.GetAllPlayers(game_proto.Nothing()):
-            print('in for')
             ret.append((i.id, i.x, i.y))
-            print('appended')
         return ret
 
     def get_player_name(self, id):
-        print('in get player name')
         ret = self._game_service.GetPlayerName(game_proto.Id(s=id))
-        print('ret rec')
         return ret.s
 
 

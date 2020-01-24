@@ -4,17 +4,19 @@ from random import randrange as rd, choice
 
 
 if __name__ == '__main__':
-    gk = GameClient()
-    x, y, direction = gk.connect()
-    while not gk.connected:  # Вроде этот while можно убрать
-        sleep(0.1)
+    gk = []
+    for i in range(10):
+        gk.append(GameClient())
+        sleep(1)
 
+    for i in range(len(gk)):
+        x, y, direction = gk[i].connect()
+    i = 4
     while True:
-        if rd(40) < 37:
-            gk.move()
-            sleep(0.1)
-            if rd(10) < 5:
-                gk.fire()
-        else:
-            gk.turn(choice(['left', 'right', 'up', 'down']))
+        i += 1
+        gk[i % len(gk)].move()
+        sleep(0.1)
+        for p in range(2):
+            gk[(i + p) % len(gk)].fire()
+        gk[(i * 2 % 77 - i // 6) % len(gk)].turn(choice(['left', 'right', 'up', 'down']))
         sleep(0.03)

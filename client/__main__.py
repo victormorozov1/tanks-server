@@ -19,13 +19,11 @@ def player_healths_change_received(message):
     if message.change <= 0:
         if message.id == tank.id:
             my_game.running = False
-            print('end running')
         else:
             delete_tank(message.id)
 
 
 def player_movement_received(message):
-    print('player move rec, id=', message.id, ' coords', message.new_x, message.new_y)
     id, new_x, new_y = message.id, message.new_x, message.new_y
     if id in tanks.keys():
         tanks[id].move_to(new_x, new_y)
@@ -65,9 +63,9 @@ class Tank:
                          'down': pygame.transform.rotate(picture, 180),
                          'right': pygame.transform.rotate(picture, -90),
                          'left': pygame.transform.rotate(picture, 90)}
+        self.turn(self.direction)
         my_game.field.add_object(id, self)
         self.name = gk.get_player_name(id)
-        self.turn(self.direction)
 
     def move_on(self, move_x, move_y):
         self.x += move_x
@@ -100,6 +98,8 @@ class Tank:
     def turn(self, direction):
         self.picture = self.pictures[direction]
 
+    def __str__(self):
+        return f'Tank(id={self.id}, x={self.x}, y={self.y}, direction={self.direction}'
 
 class MyGame(Game):
     def __init__(self, *args, **kwargs):
@@ -134,18 +134,12 @@ class MyGame(Game):
 
 
 def start_game(win):
-    global mar_id, tanks_sprite_group, my_game, gk, tanks, tank
+    global my_game, gk, tanks, tank
 
     tanks = dict()
-    bullets = []
-
-    win.blit(choice(savers), (0, 0))
 
     gk = GameClient()
-    # name = get_name(win, 5, (SZX // 2 - 30, SZY // 2))
-    name = 'guest'
-    if not name:
-        return True
+
     x, y, direction = gk.connect(name=name)
     while not gk.connected:  # Вроде этот while можно убрать
         sleep(0.1)
@@ -163,25 +157,34 @@ def start_game(win):
                      field_dict=field_dict)
 
     tank = Tank(gk.id, x=x, y=y, direction=direction)
+    tanks[tank.id] = tank
+
+    print('my id =', gk.id)
 
     for i in gk.get_all_players():
         if i[0] != tank.id:
             tanks[i[0]] = Tank(i[0], x=i[1], y=i[2], healths=i[3])
+        print(tanks[i[0]])
 
     gk.start_listening_for_players_movements(player_movement_received)
     gk.start_listening_for_players_turns(player_turn_received)
     gk.start_listening_for_bullets_positions(bullets_received)
     gk.start_listening_for_healths_changing(player_healths_change_received)
 
-    tanks[tank.id] = tank
+
 
     return my_game.run()
 
 
 if __name__ == '__main__':
+    global name
     pygame.init()
     win = pygame.display.set_mode((SZX, SZY), pygame.RESIZABLE)
-    start_game(win)
-    #while not start_game(win):
-     #   pass
+
+    win.blit(choice(savers), (0, 0))
+    name = get_name(win, 5, (SZX // 2 - 30, SZY // 2))
+
+    if name:
+        while not start_game(win):
+            sleep(1)
 
