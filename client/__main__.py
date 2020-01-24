@@ -30,7 +30,7 @@ def player_movement_received(message):
         tanks[id].move_to(new_x, new_y)
     else:
         tanks[id] = Tank(id, x=new_x, y=new_y)
-        my_game.field.add_object(id, tank)
+        my_game.field.add_object(id, tanks[id])
 
 
 def player_turn_received(message):
