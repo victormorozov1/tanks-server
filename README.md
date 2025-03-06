@@ -10,7 +10,7 @@ To start game you need to run one game server, and ane or many game clients conn
 
 To start game server:
 ```
-python -m game-server
+python -m game_server
 ```
 
 To start game client:
