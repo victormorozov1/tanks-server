@@ -18,5 +18,9 @@ To start game client:
 python -m client
 ```
 
+## Controls
+
+`A`+`W`+`S`+`D` to control your tank movements, `Space` to fire
+
 ## Screenshot.
   ![Скриншот из игры](https://github.com/victormorozov1/tanks-server/raw/master/screenshots/scr1.png)
