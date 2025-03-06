@@ -1,13 +1,16 @@
 import grpc
+import os
 import threading
 from client.grpc_out import game_pb2_grpc as game_grpc
 from client.grpc_out import game_pb2 as game_proto
 from client.functions import *
 from client.constants import *
 
+HOST = os.getenv('HOST', 'localhost')
+PORT = os.getenv('PORT', 5000)
 
 class GameClient:
-    def __init__(self, port=5000, host='10.0.10.253'):
+    def __init__(self, port=PORT, host=HOST):
         self._port = port
         self._host = host
         self._channel = grpc.insecure_channel(str(self._host) + ':' + str(self._port))
