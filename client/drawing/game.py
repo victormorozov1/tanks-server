@@ -23,18 +23,15 @@ class Game:
         self.szy = szy
         self.exit = False
 
-    def handle_event_exit(self, ev):
-        if ev.type == pygame.QUIT:
-            self.exit = True
-            print('EXIT TRUE')
-
     def handle_event(self, ev):
         pass
 
     def handle_events(self):
         for i in pygame.event.get():
-            self.handle_event(i)
-            self.handle_event_exit(i)
+            if i.type == pygame.QUIT:
+                self.exit = True
+            else:
+                self.handle_event(i)
 
     def handle_pressed(self, key):
         pass

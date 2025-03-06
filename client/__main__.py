@@ -1,9 +1,6 @@
-import pygame, os
 from client.game_client import *
 from time import sleep
 from client.drawing.game import Game
-import pygame
-from client.drawing.constants import *
 from client.drawing.pictures import *
 from client.drawing.get_name import get_name
 from random import choice
@@ -125,18 +122,18 @@ class MyGame(Game):
             self.field.move_object_to(id, new_x, new_y)
 
     def handle_pressed(self, key):
-        if key in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN]:
+        if key in [pygame.K_d, pygame.K_a, pygame.K_w, pygame.K_s]:
             gk.move()
 
     def handle_event(self, ev):
         if ev.type == pygame.KEYDOWN:
-            if ev.key == pygame.K_RIGHT:
+            if ev.key == pygame.K_d:
                 gk.turn('right')
-            elif ev.key == pygame.K_LEFT:
+            elif ev.key == pygame.K_a:
                 gk.turn('left')
-            elif ev.key == pygame.K_UP:
+            elif ev.key == pygame.K_w:
                 gk.turn('up')
-            elif ev.key == pygame.K_DOWN:
+            elif ev.key == pygame.K_s:
                 gk.turn('down')
             elif ev.key == pygame.K_SPACE:
                 gk.fire()
